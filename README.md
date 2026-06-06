@@ -18,23 +18,25 @@
 
 ---
 
-## 🚀 Overview
+##  Overview
 
-**ALRes** is a high-performance, universal resume builder designed for the modern job seeker. Built on the **MERN stack**, it integrates cutting-edge **Generative AI** to transform your experience into a polished, professional narrative. 
+**ALRes** is a modern AI-powered resume builder built on the MERN stack. Beyond resume creation, it acts as an intelligent writing assistant by helping users generate content, correct grammar, enhance wording, and receive personalized suggestions to create polished, professional, and ATS-friendly resumes. With real-time previews, cloud synchronization, and local-first support, ALRes delivers a seamless resume-building experience for today's job seekers.
 
-Whether you're looking for cloud synchronization or a private local-first workflow, ALRes offers a seamless, distraction-free environment to build resumes that get noticed.
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
-- 🤖 **AI-Assisted Writing**: Generate high-impact summaries and job descriptions using Google Gemini and Groq AI.
-- 📄 **Premium PDF Exports**: Beautifully formatted, ATS-compliant PDFs rendered via Puppeteer.
-- 🌐 **Multi-Language Support**: A global-ready interface with comprehensive localization.
-- 🔐 **OAuth Integration**: Secure, effortless sign-in with Google.
-- 🌗 **Flexible Workspaces**: Toggle between **Cloud Sync** (synced across devices) and **Local Mode** (stored privately on your machine).
-- ⚡ **Live Canvas**: Real-time preview of your resume as you type.
-- 🎨 **Corporate Modern Design**: A meticulously crafted UI using a custom design system based on *Public Sans*.
+*  **AI Resume Assistant**: Generate professional summaries, work experience descriptions, and resume content using Google Gemini and Groq AI.
+*  **AI Grammar & Writing Enhancement**: Instantly improve grammar, clarity, tone, and professionalism across your resume.
+*  **Smart Resume Suggestions**: Receive AI-powered recommendations to strengthen resume sections and better showcase your skills and experience.
+*  **Premium PDF Exports**: Beautifully formatted, ATS-compliant PDFs rendered via Puppeteer.
+*  **Live Canvas Preview**: See changes reflected instantly while editing your resume.
+*  **Flexible Workspaces**: Switch between Cloud Sync and Local Mode for maximum flexibility and privacy.
+*  **Multi-Language Support**: Create resumes with a localized and accessible user experience.
+*  **Google OAuth Authentication**: Secure and seamless sign-in experience.
+*  **Modern Professional Design**: Clean, responsive interface built with a custom design system based on Public Sans.
+
 
 ---
 
@@ -55,7 +57,7 @@ Whether you're looking for cloud synchronization or a private local-first workfl
 
 ---
 
-## 🏁 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Node.js v18+
@@ -64,7 +66,7 @@ Whether you're looking for cloud synchronization or a private local-first workfl
 
 
 
-## 🔍 Why ALRes?
+##  Why ALRes?
 
 ALRes isn't just a form; it's a career tool. By combining an **Institutional Design System** with **AI Intelligence**, it removes the friction of document formatting, allowing you to focus on what matters: your career story.
 
