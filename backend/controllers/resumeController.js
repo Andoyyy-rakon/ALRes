@@ -109,8 +109,15 @@ const downloadPdf = async (req, res) => {
     
     res.end(Buffer.from(buffer), 'binary');
   } catch (error) {
-    console.error('PDF Generation Error:', error);
-    res.status(500).json({ message: 'Failed to generate PDF. ' + error.message });
+    console.error('PDF Generation Error details:', {
+      message: error.message,
+      stack: error.stack,
+      resumeId: req.params.id
+    });
+    res.status(500).json({ 
+      message: 'Failed to generate PDF. Internal server error.',
+      error: process.env.NODE_ENV === 'production' ? 'Generation failed' : error.message 
+    });
   }
 };
 
@@ -154,8 +161,14 @@ const downloadGuestPdf = async (req, res) => {
     
     res.end(Buffer.from(buffer), 'binary');
   } catch (error) {
-    console.error('Guest PDF Generation Error:', error);
-    res.status(500).json({ message: 'Failed to generate PDF. ' + error.message });
+    console.error('Guest PDF Generation Error details:', {
+      message: error.message,
+      stack: error.stack
+    });
+    res.status(500).json({ 
+      message: 'Failed to generate PDF. Internal server error.',
+      error: process.env.NODE_ENV === 'production' ? 'Generation failed' : error.message 
+    });
   }
 };
 

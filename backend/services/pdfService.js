@@ -19,15 +19,22 @@ const getBrowser = async () => {
     }
     
     console.log('Launching new singleton browser instance...');
-    browserInstance = await puppeteer.launch({
-        headless: 'new',
-        args: [
-            '--no-sandbox', 
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-gpu'
-        ]
-    });
+    try {
+        browserInstance = await puppeteer.launch({
+            headless: 'new',
+            args: [
+                '--no-sandbox', 
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+                '--no-zygote',
+                '--single-process'
+            ]
+        });
+    } catch (error) {
+        console.error('Failed to launch puppeteer:', error);
+        throw error;
+    }
     return browserInstance;
 };
 
