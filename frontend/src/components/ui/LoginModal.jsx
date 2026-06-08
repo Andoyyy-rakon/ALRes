@@ -3,17 +3,20 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import axios from '../../api/axiosInstance';
-import { X, Mail, Lock } from 'lucide-react';
+import { X, Mail, Lock, Loader2 } from 'lucide-react';
+import logo from '../../assets/logo.png'; 
 
 const LoginModal = () => {
   const { isLoginModalOpen, closeLoginModal, login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   
   if (!isLoginModalOpen) return null;
 
   const handleGoogleSuccess = async (credentialResponse) => {
+    setIsLoggingIn(true);
     try {
       const { data } = await axios.post('/auth/google', {
         credential: credentialResponse.credential,
@@ -23,6 +26,7 @@ const LoginModal = () => {
       navigate('/dashboard');
     } catch (error) {
       console.error('Login failed:', error);
+      setIsLoggingIn(false);
     }
   };
 
@@ -102,20 +106,38 @@ const LoginModal = () => {
               </span>
             </div>
             
-            <div className="w-full flex justify-center">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => console.error('Login Failed')}
-                text="continue_with"
-                size="large"
-                theme="outline"
-                shape="rectangular"
-                width="100%"
-              />
+            <div className="w-full flex justify-center overflow-hidden px-4">
+              <div className="w-full max-w-[280px] overflow-hidden flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => console.error('Login Failed')}
+                  text="continue_with"
+                  size="large"
+                  theme="outline"
+                  shape="rectangular"
+                  width="100%"
+                />
+              </div>
             </div>
             
           </div>
         </div>
+
+        {/* Loading Overlay */}
+        {isLoggingIn && (
+          <div className="fixed inset-0 z-[130] flex flex-col items-center justify-center bg-white/90 backdrop-blur-md transition-all animate-in fade-in duration-300">
+            <div className="relative">
+              <div className="w-24 h-24 rounded-full border-4 border-primary-100 border-t-primary-600 animate-spin"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <img src={logo} alt="ALRes Logo" className="w-12 h-12 object-contain" />
+              </div>
+            </div>
+            <div className="mt-8 text-center">
+              <h4 className="text-xl font-bold text-slate-900 mb-2">Signing you in...</h4>
+              <p className="text-slate-500 text-sm animate-pulse">Please wait while we connect your account</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

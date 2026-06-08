@@ -4,6 +4,7 @@ import axios from '../api/axiosInstance';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { Plus, FileText, Trash2, Edit2, Download, Cloud, AlertCircle, X, Loader2 } from 'lucide-react';
+import logo from '../assets/logo.png'; 
 import { GoogleLogin } from '@react-oauth/google';
 import Modal from '../components/ui/Modal';
 import { useToast } from '../context/ToastContext';
@@ -20,6 +21,7 @@ const Dashboard = () => {
   const [showDownloadModal, setShowDownloadModal] = useState(false);
   const [resumeToDownload, setResumeToDownload] = useState(null);
   const [downloadingResumes, setDownloadingResumes] = useState({});
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -163,14 +165,16 @@ const Dashboard = () => {
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
+    setIsLoggingIn(true);
     try {
       const { data } = await axios.post('/auth/google', {
         credential: credentialResponse.credential,
       });
       login(data);
-      
     } catch (error) {
       console.error('Login failed:', error);
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -352,6 +356,22 @@ const Dashboard = () => {
           Are you sure you want to download this resume as a PDF?
         </p>
       </Modal>
+
+      {/* Google Login Loading Overlay */}
+      {isLoggingIn && (
+        <div className="fixed inset-0 z-[130] flex flex-col items-center justify-center bg-white/90 backdrop-blur-md transition-all animate-in fade-in duration-300">
+          <div className="relative">
+            <div className="w-24 h-24 rounded-full border-4 border-primary-100 border-t-primary-600 animate-spin"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <img src={logo} alt="ALRes Logo" className="w-12 h-12 object-contain" />
+            </div>
+          </div>
+          <div className="mt-8 text-center">
+            <h4 className="text-xl font-bold text-slate-900 mb-2">Signing you in...</h4>
+            <p className="text-slate-500 text-sm animate-pulse">Connecting your account to ALRes</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

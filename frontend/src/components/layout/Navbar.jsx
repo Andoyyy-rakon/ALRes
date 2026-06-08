@@ -13,8 +13,10 @@ const Navbar = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const handleGoogleSuccess = async (credentialResponse) => {
+    setIsLoggingIn(true);
     try {
       const { data } = await axios.post('/auth/google', {
         credential: credentialResponse.credential,
@@ -24,7 +26,8 @@ const Navbar = () => {
       navigate('/dashboard');
     } catch (error) {
       console.error('Login failed:', error);
-      
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -108,22 +111,24 @@ const Navbar = () => {
           
           <div className="flex flex-col gap-4">
             {/* Google Login Option */}
-            <div className="group relative">
+            <div className="group relative w-full">
               <div className="absolute -inset-0.5 bg-gradient-to-r from-primary-600 to-indigo-600 rounded-2xl blur opacity-10 group-hover:opacity-15 transition duration-300"></div>
-              <div className="relative flex flex-col items-center bg-white border border-slate-200 rounded-2xl p-6 transition-all duration-300 group-hover:border-primary-200 group-hover:shadow-lg">
-                <div className="w-full flex justify-center mb-4 scale-110">
-                  <GoogleLogin
-                    onSuccess={(credentialResponse) => {
-                      handleGoogleSuccess(credentialResponse);
-                      closeLoginModal();
-                    }}
-                    onError={() => console.error('Login Failed')}
-                    useOneTap={false}
-                    theme="filled_blue"
-                    shape="pill"
-                    width="280px"
-                    text="signin_with"
-                  />
+              <div className="relative flex flex-col items-center bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 transition-all duration-300 group-hover:border-primary-200 group-hover:shadow-lg">
+                <div className="w-full max-w-[280px] flex justify-center mb-4 overflow-hidden">
+                  <div className="w-[calc(100vw-120px)] sm:w-full min-w-[200px] max-w-[280px] overflow-hidden flex justify-center">
+                    <GoogleLogin
+                      onSuccess={(credentialResponse) => {
+                        handleGoogleSuccess(credentialResponse);
+                        closeLoginModal();
+                      }}
+                      onError={() => console.error('Login Failed')}
+                      useOneTap={false}
+                      theme="filled_blue"
+                      shape="pill"
+                      width="100%"
+                      text="signin_with"
+                    />
+                  </div>
                 </div>
                 <div className="text-center">
                   <h4 className="text-sm font-bold text-slate-900 mb-1">Sync with Cloud</h4>
@@ -197,6 +202,22 @@ const Navbar = () => {
           Are you sure you want to log out? You will need to sign in again to access your cloud resumes.
         </p>
       </Modal>
+
+      {/* Google Login Loading Overlay */}
+      {isLoggingIn && (
+        <div className="fixed inset-0 z-[130] flex flex-col items-center justify-center bg-white/90 backdrop-blur-md transition-all animate-in fade-in duration-300">
+          <div className="relative">
+            <div className="w-24 h-24 rounded-full border-4 border-primary-100 border-t-primary-600 animate-spin"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <img src={logo} alt="ALRes Logo" className="w-12 h-12 object-contain" />
+            </div>
+          </div>
+          <div className="mt-8 text-center">
+            <h4 className="text-xl font-bold text-slate-900 mb-2">Signing you in...</h4>
+            <p className="text-slate-500 text-sm animate-pulse">Connecting your account to ALRes</p>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
