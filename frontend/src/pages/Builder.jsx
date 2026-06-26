@@ -809,7 +809,7 @@ const Builder = () => {
             {saveStatus === 'unsaved' && (
               <>
                 {}
-                <span className="text-[11px] font-bold text-amber-600 tracking-tight">Unsaved changes</span>
+                <span className="text-[11px] font-bold text-slate-800 tracking-tight">Unsaved changes</span>
               </>
             )}
             {saveStatus === 'error' && (
