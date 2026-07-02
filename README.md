@@ -69,9 +69,5 @@ Live Demo: https://alres-one.vercel.app/
 
 ALRes isn't just a form; it's a career tool. By combining an **Institutional Design System** with **AI Intelligence**, it removes the friction of document formatting, allowing you to focus on what matters: your career story.
 
----
 
 
-<div align="center">
-Built for professionals, by professionals.
-</div>
