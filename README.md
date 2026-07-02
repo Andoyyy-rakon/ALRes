@@ -39,7 +39,7 @@ Live Demo: https://alres-one.vercel.app/
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Frontend Architecture
 - **React 19** & **Vite** for a blazing-fast user experience.
@@ -54,14 +54,6 @@ Live Demo: https://alres-one.vercel.app/
 - **Puppeteer** for server-side PDF generation.
 - **JWT** for secure session management.
 
----
-
-##  Getting Started
-
-### Prerequisites
-- Node.js v18+
-- MongoDB instance (local or Atlas)
-- Google Cloud Project (for OAuth and API access)
 
 
 
