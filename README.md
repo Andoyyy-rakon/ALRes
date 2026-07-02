@@ -2,15 +2,14 @@
 
 <img src="frontend/src/assets/logo.png" alt="ALRes Logo" width="120">
 
-# ALRes | Universal AI Resume Builder
-
+# ALRes | AI-Powered Resume Builder
+Live Demo: https://alres-one.vercel.app/
 **Empower your career with an AI-driven, professional resume platform.**
 
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
 [![Node.js](https://img.shields.io/badge/Node.js-20-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Latest-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Gemini AI](https://img.shields.io/badge/AI-Gemini-orange?style=for-the-badge&logo=google-gemini&logoColor=white)](https://deepmind.google/technologies/gemini/)
 
 [Key Features](#-key-features) • [Deployment](#-getting-started) • [Tech Stack](#-tech-stack) • [License](#-license)
 
