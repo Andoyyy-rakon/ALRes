@@ -417,7 +417,7 @@ const ResumePreview = ({ resume, paperSize, viewMode, mobileView, onOverflowChan
           </section>
         )}
 
-        {resume.enabledSections.skills && resume.skills?.length > 0 && (
+        {resume.enabledSections.skills && Array.isArray(resume.skills) && resume.skills.length > 0 && (
           <section style={getSectionStyle('skills')}>
             <SectionTitle title={t('resume.skills')} />
             <div className="flex flex-wrap gap-x-6 gap-y-2">
@@ -431,7 +431,7 @@ const ResumePreview = ({ resume, paperSize, viewMode, mobileView, onOverflowChan
           </section>
         )}
 
-        {resume.enabledSections.certifications && resume.certifications?.length > 0 && (
+        {resume.enabledSections.certifications && Array.isArray(resume.certifications) && resume.certifications.length > 0 && (
           <section style={getSectionStyle('certifications')}>
             <SectionTitle title={t('resume.certifications')} />
             <ul className="list-disc ml-4 text-slate-700 space-y-1">
@@ -442,7 +442,7 @@ const ResumePreview = ({ resume, paperSize, viewMode, mobileView, onOverflowChan
           </section>
         )}
 
-        {resume.enabledSections.languages && resume.languages?.length > 0 && (
+        {resume.enabledSections.languages && Array.isArray(resume.languages) && resume.languages.length > 0 && (
           <section style={getSectionStyle('languages')}>
             <SectionTitle title={t('resume.languages')} />
             <div className="flex flex-wrap gap-3">
@@ -453,7 +453,7 @@ const ResumePreview = ({ resume, paperSize, viewMode, mobileView, onOverflowChan
           </section>
         )}
 
-        {resume.enabledSections.achievements && resume.achievements?.length > 0 && (
+        {resume.enabledSections.achievements && Array.isArray(resume.achievements) && resume.achievements.length > 0 && (
           <section style={getSectionStyle('achievements')}>
             <SectionTitle title="Achievements" />
             <ul className="list-disc ml-4 text-slate-700 space-y-1">

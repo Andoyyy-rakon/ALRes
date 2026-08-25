@@ -57,6 +57,8 @@ const SectionStylePanel = ({ sectionKey, resume, setResume }) => {
   );
 };
 
+const toText = (val) => Array.isArray(val) ? val.join('\n') : (typeof val === 'string' ? val : '');
+
 const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCheck, aiLoading, confirmDelete }) => {
   const { t } = useLanguage();
   const [openStyle, setOpenStyle] = useState(null);
@@ -89,7 +91,7 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
 
   return (
     <div className="space-y-8">
-      {}
+      {/* PROJECTS SECTION */}
       {resume.enabledSections.projects && (
         <section>
           <div className="flex items-center justify-between mb-4 border-b border-slate-100 pb-2">
@@ -172,7 +174,7 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
         </section>
       )}
 
-      {}
+      {/* CERTIFICATIONS SECTION */}
       {resume.enabledSections.certifications && (
         <section>
           <div className="flex items-center justify-between mb-3 border-b border-slate-100 pb-1">
@@ -189,7 +191,7 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
                   {openStyle === 'certifications' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                 </button>
                 <button 
-                    onClick={() => handleGrammarCheck((resume.certifications || []).join('\n'), 'certifications')}
+                    onClick={() => handleGrammarCheck(toText(resume.certifications), 'certifications')}
                     disabled={aiLoading}
                     className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100 hover:bg-green-100 transition-colors"
                 >
@@ -211,7 +213,7 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
           <textarea
             rows={3}
             placeholder="AWS Certified Solutions Architect, Google Professional Data Engineer"
-            value={(resume.certifications || []).join('\n')}
+            value={toText(resume.certifications)}
             onChange={(e) => setResume({ 
               ...resume, 
               certifications: e.target.value.split('\n').filter(s => s.trim())
@@ -238,7 +240,7 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
                   {openStyle === 'languages' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                 </button>
                 <button 
-                    onClick={() => handleGrammarCheck((resume.languages || []).join('\n'), 'languages')}
+                    onClick={() => handleGrammarCheck(toText(resume.languages), 'languages')}
                     disabled={aiLoading}
                     className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100 hover:bg-green-100 transition-colors"
                 >
@@ -261,7 +263,7 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
             <textarea
               rows={3}
               placeholder="English (Fluent), Spanish (Conversational)"
-              value={(resume.languages || []).join('\n')}
+              value={toText(resume.languages)}
               onChange={(e) => setResume({ 
                 ...resume, 
                 languages: e.target.value.split('\n').filter(s => s.trim())
@@ -272,7 +274,7 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
         </section>
       )}
 
-      {}
+      {/* ACHIEVEMENTS SECTION */}
       {resume.enabledSections.achievements && (
         <section>
           <div className="flex items-center justify-between mb-3 border-b border-slate-100 pb-1">
@@ -289,7 +291,7 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
                   {openStyle === 'achievements' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                 </button>
                 <button 
-                    onClick={() => handleGrammarCheck((resume.achievements || []).join('\n'), 'achievements')}
+                    onClick={() => handleGrammarCheck(toText(resume.achievements), 'achievements')}
                     disabled={aiLoading}
                     className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100 hover:bg-green-100 transition-colors"
                 >
@@ -311,7 +313,7 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
           <textarea
             rows={3}
             placeholder="Employee of the Year 2023, Ranked top 10% in coding competition"
-            value={(resume.achievements || []).join('\n')}
+            value={toText(resume.achievements)}
             onChange={(e) => setResume({ 
               ...resume, 
               achievements: e.target.value.split('\n').filter(s => s.trim())

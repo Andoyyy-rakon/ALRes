@@ -1,41 +1,19 @@
 const puppeteer = require('puppeteer');
 const { RESUME_TEMPLATES } = require('../data/resumeTemplates');
 
-let browserInstance = null;
-
 const getBrowser = async () => {
-    if (browserInstance) {
-        try {
-            
-            await browserInstance.version();
-            return browserInstance;
-        } catch (e) {
-            console.log('Existing browser instance is dead or unresponsive, closing and relaunching...', e);
-            try {
-                await browserInstance.close();
-            } catch (_) {}
-            browserInstance = null;
-        }
-    }
-    
-    console.log('Launching new singleton browser instance...');
-    try {
-        browserInstance = await puppeteer.launch({
-            headless: 'new',
-            args: [
-                '--no-sandbox', 
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-gpu',
-                '--no-zygote',
-                '--single-process'
-            ]
-        });
-    } catch (error) {
-        console.error('Failed to launch puppeteer:', error);
-        throw error;
-    }
-    return browserInstance;
+    const isProduction = process.env.NODE_ENV === 'production';
+    return await puppeteer.launch({
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+            // These flags are Linux/production only - they crash on Windows
+            ...(isProduction ? ['--no-zygote', '--single-process'] : [])
+        ]
+    });
 };
 
 const generatePDF = async (resume) => {
@@ -518,9 +496,11 @@ const generatePDF = async (resume) => {
     } finally {
         if (page) {
             try {
+                const browser = page.browser();
                 await page.close();
+                await browser.close();
             } catch (err) {
-                console.error('Error closing page:', err);
+                console.error('Error closing browser:', err);
             }
         }
     }

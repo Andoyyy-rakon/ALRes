@@ -9,8 +9,20 @@ connectDB();
 
 const app = express();
 
-app.use(cors({ 
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+const allowedOrigins = [process.env.FRONTEND_URL].filter(Boolean);
+if (process.env.NODE_ENV !== 'production') {
+  allowedOrigins.push('http://localhost:5173', 'http://localhost:3000');
+}
+
+app.use(cors({
+  origin: function (origin, callback) {
+
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('CORS Policy: Origin not allowed'));
+  },
+  credentials: true,
   exposedHeaders: ['Content-Disposition', 'Content-Length']
 }));
 app.use(express.json({ limit: '50mb' }));

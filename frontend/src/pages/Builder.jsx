@@ -625,7 +625,17 @@ const Builder = () => {
           newResume[fieldPath] = array;
         }
       } else {
-        newResume[fieldPath] = corrected;
+        if (['certifications', 'languages', 'achievements'].includes(fieldPath)) {
+          newResume[fieldPath] = typeof corrected === 'string'
+            ? corrected.split('\n').map(s => s.trim()).filter(Boolean)
+            : corrected;
+        } else if (fieldPath === 'skills') {
+          newResume[fieldPath] = typeof corrected === 'string'
+            ? corrected.split(/[\n,]/).map(s => s.trim()).filter(Boolean)
+            : corrected;
+        } else {
+          newResume[fieldPath] = corrected;
+        }
       }
       return newResume;
     });

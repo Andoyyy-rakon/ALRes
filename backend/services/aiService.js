@@ -24,10 +24,13 @@ class AIService {
         messages: [
           { role: "user", content: prompt }
         ],
-        model: "llama-3.1-8b-instant", 
+        model: "qwen/qwen3.6-27b",
+        reasoning_effort: "none",
       });
 
-      return completion.choices[0]?.message?.content || "";
+      const raw = completion.choices[0]?.message?.content || "";
+
+      return raw.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
     } catch (error) {
       console.error('Error generating AI content:', error);
       throw new Error('Failed to generate AI content');

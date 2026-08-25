@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
@@ -83,7 +83,9 @@ const LandingPage = () => {
     }
   ];
 
-  const handleGoogleSuccess = async (credentialResponse) => {
+  const googleLoginRef = useRef(null);
+
+  const handleGoogleSuccess = useCallback(async (credentialResponse) => {
     try {
       const { data } = await axios.post('/auth/google', {
         credential: credentialResponse.credential,
@@ -93,6 +95,12 @@ const LandingPage = () => {
     } catch (error) {
       console.error('Login failed:', error);
     }
+  }, [login, navigate]);
+
+  const triggerGoogleLogin = () => {
+    // Click the hidden GoogleLogin button in the hero section
+    const btn = googleLoginRef.current?.querySelector('div[role="button"]');
+    if (btn) btn.click();
   };
 
   const smoothFadeUp = {
@@ -177,7 +185,7 @@ const LandingPage = () => {
                   <div className="absolute border-t border-slate-200 w-full"></div>
                   <span className="relative bg-white px-3 text-sm text-secondary font-medium">OR</span>
                 </div>
-                <div className="w-full flex justify-center mt-2">
+                <div className="w-full flex justify-center mt-2" ref={googleLoginRef}>
                   <GoogleLogin
                     onSuccess={handleGoogleSuccess}
                     onError={() => console.error('Login Failed')}
@@ -362,14 +370,13 @@ const LandingPage = () => {
                  {!user ? (
                   <div className="flex flex-col items-center gap-4 w-full max-w-[320px] mx-auto">
                     <div className="w-full flex justify-center">
-                      <GoogleLogin
-                        onSuccess={handleGoogleSuccess}
-                        onError={() => console.error('Login Failed')}
-                        text="continue_with"
-                        size="large"
-                        theme="outline"
-                        shape="rectangular"
-                      />
+                      <button
+                        onClick={triggerGoogleLogin}
+                        className="flex items-center gap-3 px-6 py-3 bg-white text-slate-700 font-semibold text-base rounded-lg border border-slate-300 shadow-sm hover:shadow-md hover:bg-slate-50 transition-all duration-200"
+                      >
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5" />
+                        Continue with Google
+                      </button>
                     </div>
                   </div>
                   ) : (
