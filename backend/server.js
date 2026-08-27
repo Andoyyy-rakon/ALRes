@@ -9,18 +9,37 @@ connectDB();
 
 const app = express();
 
-const allowedOrigins = [process.env.FRONTEND_URL].filter(Boolean);
-if (process.env.NODE_ENV !== 'production') {
-  allowedOrigins.push('http://localhost:5173', 'http://localhost:3000');
-}
+// COOP and Resource Policy headers for Google Auth compatibility
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+});
+
+// Resilient CORS configuration
+const rawFrontendUrl = process.env.FRONTEND_URL || '';
+const cleanFrontendUrl = rawFrontendUrl.trim().replace(/\/$/, '');
+
+const allowedOrigins = [
+  cleanFrontendUrl,
+  'https://alres-one.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000'
+].filter(Boolean);
 
 app.use(cors({
   origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, curl)
+    if (!origin) return callback(null, true);
 
-    if (!origin || allowedOrigins.includes(origin)) {
+    const cleanOrigin = origin.trim().replace(/\/$/, '');
+
+    if (allowedOrigins.includes(cleanOrigin) || cleanOrigin.endsWith('.vercel.app')) {
       return callback(null, true);
     }
-    return callback(new Error('CORS Policy: Origin not allowed'));
+
+    console.warn(`Blocked by CORS: ${origin}`);
+    return callback(null, false);
   },
   credentials: true,
   exposedHeaders: ['Content-Disposition', 'Content-Length']
