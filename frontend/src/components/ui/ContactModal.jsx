@@ -173,7 +173,7 @@ const ContactModal = ({ isOpen, onClose }) => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-lg font-bold disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold disabled:opacity-50 transition-colors duration-180 cursor-pointer"
         >
           {isSubmitting ? (
             "Sending..."

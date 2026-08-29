@@ -38,15 +38,15 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <nav className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex-shrink-0 flex items-center">
             <Link to="/" className="flex items-center group transition-all">
-              <div className="p-1.5 rounded-xl transition-colors">
-                <img src={logo} alt="ALRes Logo" className="h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0" />
+              <div className="p-1.5 rounded-xl transition-colors group-hover:bg-primary-50">
+                <img src={logo} alt="ALRes Logo" className="h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0 transition-transform group-hover:scale-105" />
               </div>
-              <span className="ml-1.5 text-xl sm:text-2xl font-bold tracking-tight text-primary-600 truncate max-w-[150px] sm:max-w-none">
+              <span className="ml-1.5 text-xl sm:text-2xl font-extrabold tracking-tight gradient-text truncate max-w-[150px] sm:max-w-none">
                 ALRes
               </span>
             </Link>
@@ -57,7 +57,7 @@ const Navbar = () => {
               <>
                 <Link
                   to="/dashboard"
-                  className="text-slate-600 hover:text-slate-900 px-2 sm:px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap"
+                  className="relative text-slate-600 hover:text-primary-700 px-2 sm:px-3 py-2 rounded-md text-sm font-semibold whitespace-nowrap transition-colors duration-200 after:absolute after:bottom-0 after:left-2 after:right-2 after:h-0.5 after:rounded-full after:bg-gradient-to-r after:from-primary-500 after:to-indigo-500 after:scale-x-0 after:origin-center hover:after:scale-x-100 after:transition-transform after:duration-200"
                 >
                   {t('nav.dashboard')}
                 </Link>
@@ -65,13 +65,13 @@ const Navbar = () => {
                 <div className="flex items-center gap-2 sm:gap-3 pl-2 sm:pl-4 border-l border-slate-200 flex-shrink-0">
                   <div className="flex items-center gap-2">
                     {user.picture ? (
-                      <img src={user.picture} alt="Avatar" className="w-8 h-8 rounded-full border border-slate-200 flex-shrink-0" referrerPolicy="no-referrer" />
+                      <img src={user.picture} alt="Avatar" className="w-8 h-8 rounded-full ring-2 ring-primary-400 ring-offset-1 flex-shrink-0" referrerPolicy="no-referrer" />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0">
-                        <UserIcon className="w-4 h-4 text-slate-500" />
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-100 to-indigo-100 ring-2 ring-primary-300 ring-offset-1 flex items-center justify-center flex-shrink-0">
+                        <UserIcon className="w-4 h-4 text-primary-600" />
                       </div>
                     )}
-                    <span className="text-sm font-medium text-slate-700 hidden md:block truncate max-w-[100px]">{user.name}</span>
+                    <span className="text-sm font-semibold text-slate-700 hidden md:block truncate max-w-[100px]">{user.name}</span>
                   </div>
                   <button
                     onClick={() => setShowLogoutModal(true)}
@@ -86,7 +86,7 @@ const Navbar = () => {
               <div className="flex items-center flex-shrink-0 ml-2">
                 <button
                   onClick={openLoginModal}
-                  className="flex items-center px-6 py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-all font-bold shadow-sm text-sm sm:text-base border border-transparent hover:shadow-md active:scale-95"
+                  className="btn-gradient flex items-center px-6 py-2 text-white rounded-xl font-bold text-sm sm:text-base border border-transparent"
                 >
                   {t('nav.signIn')}
                 </button>
@@ -150,9 +150,9 @@ const Navbar = () => {
                 closeLoginModal();
                 navigate('/dashboard');
               }}
-              className="group relative flex items-center gap-4 w-full p-6 bg-slate-50 border border-slate-200 rounded-2xl transition-all duration-300 hover:bg-white hover:border-primary-500 hover:shadow-xl hover:-translate-y-1 active:scale-95"
+              className="group relative flex items-center gap-4 w-full p-6 bg-slate-50 border border-slate-200 rounded-2xl transition-colors duration-200 hover:bg-slate-100 hover:border-slate-300"
             >
-              <div className="flex-shrink-0 p-3 bg-white border border-slate-200 rounded-xl text-slate-600 group-hover:bg-primary-50 group-hover:text-primary-600 group-hover:border-primary-100 transition-all shadow-sm">
+              <div className="flex-shrink-0 p-3 bg-white border border-slate-200 rounded-xl text-slate-600 group-hover:bg-primary-50 group-hover:text-primary-600 group-hover:border-primary-100 transition-colors duration-200 shadow-sm">
                 <Layout className="w-6 h-6" />
               </div>
               <div className="text-left">
@@ -163,7 +163,7 @@ const Navbar = () => {
                   {t('auth.localModeDesc')}
                 </span>
               </div>
-              <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0">
+              <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                 <ArrowRight className="w-5 h-5 text-primary-500" />
               </div>
             </button>

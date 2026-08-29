@@ -671,7 +671,7 @@ const Builder = () => {
             {resume?.jobRole && RESUME_TEMPLATES[resume.jobRole] && (
               <button
                 onClick={() => setStep('edit')}
-                className="col-span-1 sm:col-span-2 lg:col-span-3 bg-primary-600 text-white p-4 rounded-2xl shadow-sm border border-primary-500 hover:bg-primary-700 transition-all text-center font-bold"
+                className="col-span-1 sm:col-span-2 lg:col-span-3 btn-gradient text-white p-4 rounded-2xl shadow-sm text-center font-bold"
               >
                 CONTINUE WITH CURRENT ROLE: {RESUME_TEMPLATES[resume.jobRole].name.toUpperCase()}
               </button>
@@ -680,10 +680,10 @@ const Builder = () => {
               <button
                 key={key}
                 onClick={() => selectRole(key)}
-                className="relative group bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-primary-500 hover:ring-1 hover:ring-primary-500 transition-all text-left"
+                className="relative group bg-white p-6 rounded-3xl shadow-card border border-slate-200/80 ring-1 ring-slate-900/5 hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 text-left"
               >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="p-2 bg-slate-50 rounded-lg group-hover:bg-primary-50 transition-colors text-slate-600 group-hover:text-primary-600">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="p-2.5 bg-gradient-to-br from-primary-50 to-indigo-50 rounded-xl group-hover:from-primary-100 group-hover:to-indigo-100 transition-colors text-primary-600">
                     {key === 'tech' && <Code className="w-6 h-6" />}
                     {key === 'teacher' && <GraduationCap className="w-6 h-6" />}
                     {key === 'healthcare' && <Heart className="w-6 h-6" />}
@@ -726,7 +726,7 @@ const Builder = () => {
               <button
                 key={template.id}
                 onClick={() => selectTemplate(template.id)}
-                className="group flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:border-primary-500 hover:ring-1 hover:ring-primary-500 transition-all text-left"
+                className="group flex flex-col bg-white rounded-3xl shadow-card border border-slate-200/80 ring-1 ring-slate-900/5 overflow-hidden hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 text-left"
               >
                 <div className="aspect-[3/4] overflow-hidden relative">
                   <img
@@ -735,12 +735,12 @@ const Builder = () => {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-primary-600/0 group-hover:bg-primary-600/10 transition-colors flex items-center justify-center">
-                    <div className="bg-white text-primary-600 font-bold px-4 py-2 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all">
+                    <div className="bg-white text-primary-600 font-bold px-4 py-2 rounded-xl shadow-xl opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all">
                       Choose Template
                     </div>
                   </div>
                 </div>
-                <div className="p-5 border-t border-slate-50 flex-1">
+                <div className="p-5 border-t border-slate-100 flex-1">
                   <h3 className="text-sm font-bold text-slate-900 mb-1">{template.name}</h3>
                   <p className="text-xs text-slate-500 leading-relaxed">
                     {template.description}

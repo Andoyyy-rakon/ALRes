@@ -30,7 +30,7 @@ const ConfirmDeleteModal = ({
               onConfirm();
               onClose();
             }}
-            className="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-xl hover:bg-red-700 shadow-lg shadow-red-200 transition-all flex items-center gap-2"
+            className="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-xl hover:bg-red-700 transition-colors duration-180 flex items-center gap-2"
           >
             <Trash2 className="w-4 h-4" />
             {confirmText}

@@ -107,6 +107,7 @@ const translations = {
       freeLabel: "100% FREE to use"
     },
     features: {
+      freeBadge: "100% Free to Use",
       title: "Everything You Need to Land the Job",
       subtitle: "Powerful features designed to make your resume creation process effortless and effective.",
       easyTitle: "Easy-to-Use Builder",
@@ -237,6 +238,7 @@ const translations = {
       freeLabel: "100% 무료 사용"
     },
     features: {
+      freeBadge: "100% 무료 사용",
       title: "취업을 위한 모든 것",
       subtitle: "이력서 작성 과정을 쉽고 효과적으로 만들어주는 강력한 기능들입니다.",
       easyTitle: "사용하기 쉬운 빌더",
@@ -367,6 +369,7 @@ const translations = {
       freeLabel: "100% 無料で利用可能"
     },
     features: {
+      freeBadge: "100% 無料で利用可能",
       title: "就職を成功させるためのすべて",
       subtitle: "履歴書作成を簡単かつ効果的にするために設計された強力な機能。",
       easyTitle: "使いやすいビルダー",
@@ -497,6 +500,7 @@ const translations = {
       freeLabel: "100% 免费使用"
     },
     features: {
+      freeBadge: "100% 免费使用",
       title: "助你成功就业的一切所需",
       subtitle: "强大的功能旨在使你的简历创建过程毫不费力且卓有成效。",
       easyTitle: "易于使用的生成器",
@@ -627,6 +631,7 @@ const translations = {
       freeLabel: "مجاني 100٪ للاستخدام"
     },
     features: {
+      freeBadge: "مجاني 100٪ للاستخدام",
       title: "كل ما تحتاجه للحصول على الوظيفة",
       subtitle: "مميزات قوية مصممة لجعل عملية إنشاء سيرتك الذاتية سهلة وفعالة.",
       easyTitle: "منشئ سهل الاستخدام",
