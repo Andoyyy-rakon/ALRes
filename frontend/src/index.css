@@ -2,26 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
 @layer base {
   body {
     background-color: theme('colors.surface.DEFAULT');
     color: theme('colors.surface.on');
     @apply font-sans antialiased;
+    font-feature-settings: "ss01", "cv01";
+  }
+
+  ::selection {
+    background-color: theme('colors.primary.100');
+    color: theme('colors.primary.900');
+  }
+
+  /* Global SaaS Button Standard: clean, minimal transitions, no scale, no movement, no colored glow */
+  button {
+    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, opacity 180ms ease;
   }
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+/* ── Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { @apply bg-transparent; }
+::-webkit-scrollbar-thumb { @apply bg-slate-300 rounded-full; }
+::-webkit-scrollbar-thumb:hover { @apply bg-slate-400; }
+
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { @apply bg-transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { @apply bg-slate-200 rounded-full; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { @apply bg-slate-300; }
+
+/* ── Gradient Text Utility ─────────────────────────── */
+.gradient-text {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  @apply bg-transparent;
+/* ── Noise texture overlay ─────────────────────────── */
+.noise-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  @apply bg-slate-200 rounded-full;
+/* ── Clean SaaS button gradient ─────────────── */
+.btn-gradient {
+  background-color: #2563eb;
+  background-image: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  transition: background-color 180ms ease, opacity 180ms ease, filter 180ms ease;
 }
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-300;
+.btn-gradient:hover {
+  filter: brightness(0.94);
+  box-shadow: none;
+}
+.btn-gradient:active {
+  filter: brightness(0.88);
+  transform: none;
 }
