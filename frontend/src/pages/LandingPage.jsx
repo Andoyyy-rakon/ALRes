@@ -15,6 +15,7 @@ import {
   Check,
   FileText,
   Award,
+  PenLine
 } from 'lucide-react';
 import { GoogleLogin } from '@react-oauth/google';
 import axios from '../api/axiosInstance';
@@ -312,7 +313,7 @@ const LandingPage = () => {
 
   const values = [
     { icon: <ShieldCheck className="w-5 h-5" />, title: t('values.freeTitle'), description: t('values.freeDesc') },
-    { icon: <Sparkles className="w-5 h-5" />, title: t('values.noSkillsTitle'), description: t('values.noSkillsDesc') },
+    { icon: <PenLine className="w-5 h-5" />, title: t('values.noSkillsTitle'), description: t('values.noSkillsDesc') },
     { icon: <Clock className="w-5 h-5" />, title: t('values.savesTimeTitle'), description: t('values.savesTimeDesc') },
     { icon: <Zap className="w-5 h-5" />, title: t('values.smoothTitle'), description: t('values.smoothDesc') },
   ];
@@ -410,8 +411,7 @@ const LandingPage = () => {
                 transition={{ duration: 0.5 }}
                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 border border-primary-200/80 text-primary-700 text-sm font-semibold mb-7 shadow-sm"
               >
-                <Sparkles className="w-3.5 h-3.5 text-primary-500" />
-                <span>{t('hero.sparkle')}</span>
+
               </motion.div>
 
               {/* Headline */}
