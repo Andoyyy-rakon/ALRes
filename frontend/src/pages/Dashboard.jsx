@@ -179,23 +179,23 @@ const Dashboard = () => {
   };
 
   if (loading) return (
-      <div className="flex h-screen items-center justify-center bg-slate-50">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      <div className="flex h-screen items-center justify-center bg-paper">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
       </div>
   );
 
   return (
-    <div className="bg-surface min-h-screen pt-6 pb-20 font-sans">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="bg-paper min-h-screen pt-6 pb-20 font-sans">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         {!user && (
-          <div className="mb-8 bg-white border-l-4 border-l-primary-500 border border-slate-200/80 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-card">
+          <div className="mb-8 bg-white border-l-2 border-l-blue-500 border border-rule p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-card" style={{ borderRadius: '2px' }}>
             <div className="flex items-start gap-4">
-              <div className="p-2 bg-gradient-to-br from-primary-50 to-indigo-50 text-primary-600 rounded-xl shrink-0">
+              <div className="p-2 bg-paper-dim text-blue-500 shrink-0" style={{ borderRadius: '2px' }}>
                 <AlertCircle className="w-6 h-6" />
               </div>
             <div>
-              <h3 className="text-lg font-bold text-surface-on mb-1">Local Workspace Mode</h3>
-              <p className="text-sm text-secondary max-w-2xl">
+              <h3 className="text-lg font-serif font-semibold text-ink mb-1">Local Workspace Mode</h3>
+              <p className="text-sm text-ink-soft max-w-2xl">
                 You are currently building resumes locally on this device. Your work is saved to your browser's local storage.
               </p>
             </div>
@@ -204,13 +204,14 @@ const Dashboard = () => {
       )}
 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
-          <h2 className="text-xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
-              <FileText className="w-5 h-5 text-primary-600" />
+          <h2 className="text-xl font-serif font-semibold text-ink tracking-tight flex items-center gap-2">
+              <FileText className="w-5 h-5 text-blue-500" />
               {t('dashboard.myResumes')}
           </h2>
           <button
               onClick={createResume}
-              className="btn-gradient flex items-center gap-2 px-6 py-2.5 text-white rounded-xl font-bold"
+              className="btn-gradient flex items-center gap-2 px-6 py-2.5 text-white font-bold"
+              style={{ borderRadius: '2px' }}
           >
               <Plus size={18} />
               {t('dashboard.newResume')}
@@ -218,15 +219,16 @@ const Dashboard = () => {
         </div>
 
         {resumes.length === 0 ? (
-          <div className="text-center py-24 bg-white rounded-3xl border border-slate-200/80 shadow-card">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-50 to-indigo-50 border border-primary-100 mb-6 shadow-sm">
-                <FileText className="w-10 h-10 text-primary-600" />
+          <div className="text-center py-24 bg-white border border-rule shadow-card" style={{ borderRadius: '2px' }}>
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-paper-dim border border-rule mb-6 shadow-sm" style={{ borderRadius: '2px' }}>
+                <FileText className="w-10 h-10 text-blue-500" />
             </div>
-            <h3 className="text-xl font-bold text-surface-on mb-2">No resumes yet</h3>
-            <p className="text-secondary mb-8 max-w-sm mx-auto">Get started by creating your first AI-powered professional resume.</p>
+            <h3 className="text-xl font-serif font-semibold text-ink mb-2">No resumes yet</h3>
+            <p className="text-ink-soft mb-8 max-w-sm mx-auto">Get started by creating your first professional resume.</p>
              <button
                 onClick={createResume}
-                className="btn-gradient inline-flex items-center px-6 py-3 text-sm font-bold rounded-xl text-white"
+                className="btn-gradient inline-flex items-center px-6 py-3 text-sm font-bold text-white"
+                style={{ borderRadius: '2px' }}
              >
                 <Plus className="w-4 h-4 mr-2" />
                 Start Building
@@ -235,26 +237,27 @@ const Dashboard = () => {
         ) : (
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {resumes.map((resume) => (
-              <div key={resume._id} className="bg-white rounded-3xl shadow-card border border-slate-200/70 ring-1 ring-slate-900/5 overflow-hidden hover:shadow-card-hover hover:-translate-y-1.5 transition-all duration-300 group">
+              <div key={resume._id} className="bg-white border border-rule overflow-hidden hover:shadow-card-hover hover:-translate-y-1.5 transition-all duration-300 group" style={{ borderRadius: '2px' }}>
                 <div className="p-6">
                     <div className="flex justify-between items-start mb-4">
-                        <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-50 to-indigo-50 text-primary-600 group-hover:scale-105 transition-transform duration-300">
+                        <div className="flex items-center justify-center w-12 h-12 bg-paper-dim text-blue-500 group-hover:scale-105 transition-transform duration-300" style={{ borderRadius: '2px' }}>
                             <FileText size={26} />
                         </div>
-                        <span className="text-xs font-semibold text-slate-400">
+                        <span className="text-xs font-semibold text-ink-soft">
                              {t('dashboard.lastUpdated')}: {new Date(resume.updatedAt).toLocaleDateString()}
                         </span>
                     </div>
                 
-                  <h3 className="text-lg font-bold text-surface-on mb-1 truncate">{resume.title || 'Untitled Resume'}</h3>
-                  <p className="text-sm text-secondary mb-6 line-clamp-2">
+                  <h3 className="text-lg font-bold text-ink mb-1 truncate">{resume.title || 'Untitled Resume'}</h3>
+                  <p className="text-sm text-ink-soft mb-6 line-clamp-2">
                        {resume.summary || 'No summary provided yet.'}
                   </p>
                   
-                  <div className="flex items-center gap-2 pt-4 border-t border-slate-100">
+                  <div className="flex items-center gap-2 pt-4 border-t border-rule">
                     <button
                       onClick={() => navigate(`/builder/${resume._id}`)}
-                      className="flex-1 inline-flex justify-center items-center px-3 py-2 border border-slate-200 text-sm font-bold rounded-xl text-surface-on bg-white hover:bg-primary-50 hover:border-primary-200 hover:text-primary-700 transition-all duration-200"
+                      className="flex-1 inline-flex justify-center items-center px-3 py-2 border border-rule text-sm font-bold text-ink bg-white hover:bg-paper-dim hover:border-blue-500 hover:text-blue-500 transition-all duration-200"
+                      style={{ borderRadius: '2px' }}
                     >
                       <Edit2 className="w-4 h-4 mr-2" />
                       Edit
@@ -262,22 +265,25 @@ const Dashboard = () => {
                     <button 
                       onClick={() => handleDownloadClick(resume)}
                       disabled={downloadingResumes[resume._id]}
-                      className={`p-2 rounded-xl transition-all duration-200 ${
+                      className={`p-2 transition-all duration-200 ${
                         downloadingResumes[resume._id] 
-                          ? 'text-slate-300 cursor-not-allowed bg-slate-50' 
-                          : 'text-slate-400 hover:text-primary-600 hover:bg-primary-50'
+                          ? 'text-rule-strong cursor-not-allowed bg-paper-dim' 
+                          : 'text-ink-soft hover:text-blue-500 hover:bg-paper-dim'
                       }`}
+                      style={{ borderRadius: '2px' }}
                       title={downloadingResumes[resume._id] ? "Downloading..." : "Download PDF"}
                     >
                       {downloadingResumes[resume._id] ? (
-                        <Loader2 className="w-5 h-5 animate-spin text-primary-600" />
+                        <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
                       ) : (
                         <Download className="w-5 h-5"/>
                       )}
                     </button>
                     <button 
                         onClick={() => deleteResume(resume._id)}
-                        className="p-2 text-slate-400 hover:text-error hover:bg-error-container rounded-xl transition-all duration-200" title="Delete"
+                        className="p-2 text-ink-soft hover:text-pen hover:bg-red-50 transition-all duration-200" 
+                        style={{ borderRadius: '2px' }}
+                        title="Delete"
                     >
                          <Trash2 className="w-5 h-5"/>
                     </button>
@@ -304,13 +310,13 @@ const Dashboard = () => {
                 setShowDeleteModal(false);
                 setResumeToDelete(null);
               }}
-              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-ink-soft hover:bg-paper-dim rounded-sm transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={confirmDelete}
-              className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg shadow-sm transition-all flex items-center gap-2"
+              className="px-4 py-2 text-sm font-medium text-white bg-pen hover:bg-red-700 rounded-sm shadow-sm transition-all flex items-center gap-2"
             >
               <Trash2 className="w-4 h-4" />
               Delete Resume
@@ -318,7 +324,7 @@ const Dashboard = () => {
           </>
         }
       >
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-ink-soft">
           Are you sure you want to delete this resume? This action cannot be undone and all your data will be permanently lost.
         </p>
       </Modal>
@@ -338,13 +344,13 @@ const Dashboard = () => {
                 setShowDownloadModal(false);
                 setResumeToDownload(null);
               }}
-              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-ink-soft hover:bg-paper-dim rounded-sm transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={confirmDownload}
-              className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg shadow-sm transition-all flex items-center gap-2"
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-500 hover:bg-blue-deep rounded-sm shadow-sm transition-all flex items-center gap-2"
             >
               <Download className="w-4 h-4" />
               Download PDF
@@ -352,23 +358,23 @@ const Dashboard = () => {
           </>
         }
       >
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-ink-soft">
           Are you sure you want to download this resume as a PDF?
         </p>
       </Modal>
 
       {/* Google Login Loading Overlay */}
       {isLoggingIn && (
-        <div className="fixed inset-0 z-[130] flex flex-col items-center justify-center bg-white/90 backdrop-blur-md transition-all animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-[130] flex flex-col items-center justify-center bg-paper/90 backdrop-blur-md transition-all animate-in fade-in duration-300">
           <div className="relative">
-            <div className="w-24 h-24 rounded-full border-4 border-primary-100 border-t-primary-600 animate-spin"></div>
+            <div className="w-24 h-24 rounded-full border-4 border-rule border-t-blue-500 animate-spin"></div>
             <div className="absolute inset-0 flex items-center justify-center">
               <img src={logo} alt="ALRes Logo" className="w-12 h-12 object-contain" />
             </div>
           </div>
           <div className="mt-8 text-center">
-            <h4 className="text-xl font-bold text-slate-900 mb-2">Signing you in...</h4>
-            <p className="text-slate-500 text-sm animate-pulse">Connecting your account to ALRes</p>
+            <h4 className="text-xl font-serif font-semibold text-ink mb-2">Signing you in...</h4>
+            <p className="text-ink-soft text-sm animate-pulse">Connecting your account to ALRes</p>
           </div>
         </div>
       )}

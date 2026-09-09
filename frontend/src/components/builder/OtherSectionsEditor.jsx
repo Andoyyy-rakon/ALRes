@@ -4,6 +4,8 @@ import { useLanguage } from '../../context/LanguageContext';
 
 const FONTS = [
   { name: 'Default', value: '' },
+  { name: 'Fraunces (Serif)', value: '"Fraunces", serif' },
+  { name: 'Public Sans', value: '"Public Sans", sans-serif' },
   { name: 'Inter', value: 'Inter, sans-serif' },
   { name: 'Roboto', value: 'Roboto, sans-serif' },
   { name: 'Open Sans', value: '"Open Sans", sans-serif' },
@@ -23,18 +25,18 @@ const SectionStylePanel = ({ sectionKey, resume, setResume }) => {
     }));
   };
   return (
-    <div className="mb-3 p-3 bg-slate-50 rounded-lg border border-slate-200 grid grid-cols-3 gap-2">
+    <div className="mb-3 p-3 bg-paper-dim border border-rule grid grid-cols-3 gap-2" style={{ borderRadius: '2px' }}>
       <div>
-        <label className="text-[10px] font-semibold text-slate-500 block mb-1">Font</label>
+        <label className="text-[10px] font-bold text-ink-soft uppercase block mb-1">Font</label>
         <select value={sectionStyle.fontFamily || ''} onChange={e => update('fontFamily', e.target.value)}
-          className="w-full text-xs p-1.5 rounded border border-slate-200 bg-white text-slate-700">
+          className="w-full text-xs p-1.5 border border-rule bg-white text-ink" style={{ borderRadius: '2px' }}>
           {FONTS.map(f => <option key={f.name} value={f.value}>{f.name}</option>)}
         </select>
       </div>
       <div>
-        <label className="text-[10px] font-semibold text-slate-500 block mb-1">Size</label>
+        <label className="text-[10px] font-bold text-ink-soft uppercase block mb-1">Size</label>
         <select value={sectionStyle.fontSize || ''} onChange={e => update('fontSize', e.target.value)}
-          className="w-full text-xs p-1.5 rounded border border-slate-200 bg-white text-slate-700">
+          className="w-full text-xs p-1.5 border border-rule bg-white text-ink" style={{ borderRadius: '2px' }}>
           <option value="">Default</option>
           <option value="9px">Small</option>
           <option value="10px">Medium</option>
@@ -43,9 +45,9 @@ const SectionStylePanel = ({ sectionKey, resume, setResume }) => {
         </select>
       </div>
       <div>
-        <label className="text-[10px] font-semibold text-slate-500 block mb-1">Weight</label>
+        <label className="text-[10px] font-bold text-ink-soft uppercase block mb-1">Weight</label>
         <select value={sectionStyle.fontWeight || ''} onChange={e => update('fontWeight', e.target.value)}
-          className="w-full text-xs p-1.5 rounded border border-slate-200 bg-white text-slate-700">
+          className="w-full text-xs p-1.5 border border-rule bg-white text-ink" style={{ borderRadius: '2px' }}>
           <option value="">Default</option>
           <option value="300">Light</option>
           <option value="400">Regular</option>
@@ -94,22 +96,24 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
       {/* PROJECTS SECTION */}
       {resume.enabledSections.projects && (
         <section>
-          <div className="flex items-center justify-between mb-4 border-b border-slate-100 pb-2">
-            <h3 className="text-lg font-semibold text-slate-900 flex items-center">
-              <Layout className="w-5 h-5 mr-2 text-slate-400" />
+          <div className="flex items-center justify-between mb-4 border-b border-rule pb-3">
+            <h3 className="text-lg font-serif font-bold text-ink flex items-center">
+              <Layout className="w-5 h-5 mr-2 text-blue-500" />
               {t('resume.projects')}
             </h3>
             <div className="flex gap-2">
               <button
                 onClick={() => toggleStyle('projects')}
-                className="text-[10px] font-bold text-slate-500 bg-slate-50 px-2 py-0.5 rounded border border-slate-200 hover:bg-slate-100 transition-colors flex items-center gap-1"
+                className="text-[10px] font-bold text-ink-soft bg-paper-dim px-2 py-1 border border-rule hover:bg-paper transition-colors flex items-center gap-1"
+                style={{ borderRadius: '2px' }}
               >
                 <Type className="w-3 h-3" /> STYLE
                 {openStyle === 'projects' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
               </button>
               <button
                 onClick={addProject}
-                className="text-xs font-semibold text-primary-600 hover:text-primary-700 bg-primary-50 px-3 py-1.5 rounded-lg border border-primary-100 hover:bg-primary-100 transition-colors"
+                className="text-xs font-bold text-blue-700 bg-blue-50 px-3 py-1 border border-blue-200 hover:bg-blue-100 transition-colors"
+                style={{ borderRadius: '2px' }}
               >
                 + {t('editor.addEntry')}
               </button>
@@ -120,40 +124,43 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
 
           <div className="space-y-4">
             {(resume.projects || []).map((proj, index) => (
-              <div key={index} className="p-4 bg-slate-50 rounded-lg border border-slate-200 relative group">
+              <div key={index} className="p-4 bg-paper-dim border border-rule relative group" style={{ borderRadius: '2px' }}>
                 <button
                   onClick={() => removeProject(index)}
-                  className="absolute -top-2 -right-2 bg-red-100 text-red-600 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm z-10"
+                  className="absolute -top-2 -right-2 bg-red-100 text-pen border border-red-200 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm z-10"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="col-span-2 sm:col-span-1">
-                    <label className="block text-xs font-medium text-slate-500 mb-1">{t('editor.projects') || 'Project Name'}</label>
+                    <label className="block text-xs font-bold text-ink-soft uppercase tracking-wider mb-1">{t('editor.projects') || 'Project Name'}</label>
                     <input
                       type="text"
                       value={proj.name}
                       onChange={(e) => updateProject(index, 'name', e.target.value)}
-                      className="w-full text-sm p-2 rounded-md border border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 bg-white text-slate-900"
+                      className="w-full text-sm p-2.5 border border-rule bg-white text-ink focus:border-blue-500 outline-none transition-colors"
+                      style={{ borderRadius: '2px' }}
                     />
                   </div>
                   <div className="col-span-2 sm:col-span-1">
-                    <label className="block text-xs font-medium text-slate-500 mb-1">Project URL</label>
+                    <label className="block text-xs font-bold text-ink-soft uppercase tracking-wider mb-1">Project URL</label>
                     <input
                       type="url"
                       value={proj.url}
                       onChange={(e) => updateProject(index, 'url', e.target.value)}
-                      className="w-full text-sm p-2 rounded-md border border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 bg-white text-slate-900"
+                      className="w-full text-sm p-2.5 border border-rule bg-white text-ink focus:border-blue-500 outline-none transition-colors"
+                      style={{ borderRadius: '2px' }}
                     />
                   </div>
                   <div className="col-span-2">
                     <div className="flex items-center justify-between mb-1">
-                        <label className="block text-xs font-medium text-slate-500">{t('editor.description')}</label>
+                        <label className="block text-xs font-bold text-ink-soft uppercase tracking-wider">{t('editor.description')}</label>
                         <div className="flex gap-2">
                             <button 
                                 onClick={() => handleGrammarCheck(proj.description, 'projects', index)}
                                 disabled={aiLoading}
-                                className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100 hover:bg-green-100 transition-colors flex items-center gap-1"
+                                className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 border border-emerald-200 hover:bg-emerald-100 transition-colors flex items-center gap-1"
+                                style={{ borderRadius: '2px' }}
                             >
                                 <Check className="w-3 h-3" />
                                 {t('editor.grammar')}
@@ -164,7 +171,8 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
                       rows={2}
                       value={proj.description}
                       onChange={(e) => updateProject(index, 'description', e.target.value)}
-                      className="w-full text-sm p-2 rounded-md border border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 bg-white text-slate-900 resize-none"
+                      className="w-full text-sm p-2.5 border border-rule bg-white text-ink focus:border-blue-500 outline-none resize-none transition-colors"
+                      style={{ borderRadius: '2px' }}
                     />
                   </div>
                 </div>
@@ -177,15 +185,16 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
       {/* CERTIFICATIONS SECTION */}
       {resume.enabledSections.certifications && (
         <section>
-          <div className="flex items-center justify-between mb-3 border-b border-slate-100 pb-1">
-            <h3 className="text-sm font-semibold text-slate-900 flex items-center">
-              <Check className="w-4 h-4 mr-2 text-slate-400" />
+          <div className="flex items-center justify-between mb-3 border-b border-rule pb-2">
+            <h3 className="text-base font-serif font-bold text-ink flex items-center">
+              <Check className="w-4 h-4 mr-2 text-blue-500" />
               {t('resume.certifications')}
             </h3>
             <div className="flex gap-2">
                 <button
                   onClick={() => toggleStyle('certifications')}
-                  className="text-[10px] font-bold text-slate-500 bg-slate-50 px-2 py-0.5 rounded border border-slate-200 hover:bg-slate-100 transition-colors flex items-center gap-1"
+                  className="text-[10px] font-bold text-ink-soft bg-paper-dim px-2 py-1 border border-rule hover:bg-paper transition-colors flex items-center gap-1"
+                  style={{ borderRadius: '2px' }}
                 >
                   <Type className="w-3 h-3" /> STYLE
                   {openStyle === 'certifications' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
@@ -193,14 +202,16 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
                 <button 
                     onClick={() => handleGrammarCheck(toText(resume.certifications), 'certifications')}
                     disabled={aiLoading}
-                    className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100 hover:bg-green-100 transition-colors"
+                    className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 border border-emerald-200 hover:bg-emerald-100 transition-colors"
+                    style={{ borderRadius: '2px' }}
                 >
                     {t('editor.grammar')}
                 </button>
                 <button 
                     onClick={() => enhanceWithAI('certificates', 0)}
                     disabled={aiLoading}
-                    className="text-[10px] font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded border border-primary-100 hover:bg-primary-100 transition-colors flex items-center gap-1"
+                    className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 border border-blue-200 hover:bg-blue-100 transition-colors flex items-center gap-1 uppercase tracking-wider"
+                    style={{ borderRadius: '2px' }}
                 >
                     <Wand2 className="w-3 h-3" />
                     ENHANCE
@@ -218,23 +229,25 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
               ...resume, 
               certifications: e.target.value.split('\n').filter(s => s.trim())
             })}
-            className="block w-full rounded-md border border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm bg-white text-slate-900 p-2.5 resize-none"
+            className="block w-full border border-rule focus:border-blue-500 text-sm bg-white text-ink p-3 resize-none outline-none transition-colors"
+            style={{ borderRadius: '2px' }}
           />
         </section>
       )}
 
-      {}
+      {/* LANGUAGES SECTION */}
       {resume.enabledSections.languages && (
         <section>
-          <div className="flex items-center justify-between mb-3 border-b border-slate-100 pb-1">
-            <h3 className="text-sm font-semibold text-slate-900 flex items-center">
-              <Globe className="w-4 h-4 mr-2 text-slate-400" />
+          <div className="flex items-center justify-between mb-3 border-b border-rule pb-2">
+            <h3 className="text-base font-serif font-bold text-ink flex items-center">
+              <Globe className="w-4 h-4 mr-2 text-blue-500" />
               {t('resume.languages')}
             </h3>
             <div className="flex gap-2">
                 <button
                   onClick={() => toggleStyle('languages')}
-                  className="text-[10px] font-bold text-slate-500 bg-slate-50 px-2 py-0.5 rounded border border-slate-200 hover:bg-slate-100 transition-colors flex items-center gap-1"
+                  className="text-[10px] font-bold text-ink-soft bg-paper-dim px-2 py-1 border border-rule hover:bg-paper transition-colors flex items-center gap-1"
+                  style={{ borderRadius: '2px' }}
                 >
                   <Type className="w-3 h-3" /> STYLE
                   {openStyle === 'languages' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
@@ -242,14 +255,16 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
                 <button 
                     onClick={() => handleGrammarCheck(toText(resume.languages), 'languages')}
                     disabled={aiLoading}
-                    className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100 hover:bg-green-100 transition-colors"
+                    className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 border border-emerald-200 hover:bg-emerald-100 transition-colors"
+                    style={{ borderRadius: '2px' }}
                 >
                     {t('editor.grammar')}
                 </button>
                 <button 
                     onClick={() => enhanceWithAI('languages', 0)}
                     disabled={aiLoading}
-                    className="text-[10px] font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded border border-primary-100 hover:bg-primary-100 transition-colors flex items-center gap-1"
+                    className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 border border-blue-200 hover:bg-blue-100 transition-colors flex items-center gap-1 uppercase tracking-wider"
+                    style={{ borderRadius: '2px' }}
                 >
                     <Wand2 className="w-3 h-3" />
                     FORMAT
@@ -259,7 +274,7 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
 
           {openStyle === 'languages' && <SectionStylePanel sectionKey="languages" resume={resume} setResume={setResume} />}
 
-          <div className="p-4 bg-white rounded-lg border border-slate-200 relative group">
+          <div className="p-4 bg-paper-dim border border-rule relative group" style={{ borderRadius: '2px' }}>
             <textarea
               rows={3}
               placeholder="English (Fluent), Spanish (Conversational)"
@@ -268,7 +283,8 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
                 ...resume, 
                 languages: e.target.value.split('\n').filter(s => s.trim())
               })}
-              className="block w-full rounded-md border border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm bg-white text-slate-900 p-2.5 resize-none"
+              className="block w-full border border-rule focus:border-blue-500 text-sm bg-white text-ink p-3 resize-none outline-none transition-colors"
+              style={{ borderRadius: '2px' }}
             />
           </div>
         </section>
@@ -277,15 +293,16 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
       {/* ACHIEVEMENTS SECTION */}
       {resume.enabledSections.achievements && (
         <section>
-          <div className="flex items-center justify-between mb-3 border-b border-slate-100 pb-1">
-            <h3 className="text-sm font-semibold text-slate-900 flex items-center">
-              <PieChart className="w-4 h-4 mr-2 text-slate-400" />
+          <div className="flex items-center justify-between mb-3 border-b border-rule pb-2">
+            <h3 className="text-base font-serif font-bold text-ink flex items-center">
+              <PieChart className="w-4 h-4 mr-2 text-blue-500" />
               {t('resume.achievements') || 'Achievements'}
             </h3>
             <div className="flex gap-2">
                 <button
                   onClick={() => toggleStyle('achievements')}
-                  className="text-[10px] font-bold text-slate-500 bg-slate-50 px-2 py-0.5 rounded border border-slate-200 hover:bg-slate-100 transition-colors flex items-center gap-1"
+                  className="text-[10px] font-bold text-ink-soft bg-paper-dim px-2 py-1 border border-rule hover:bg-paper transition-colors flex items-center gap-1"
+                  style={{ borderRadius: '2px' }}
                 >
                   <Type className="w-3 h-3" /> STYLE
                   {openStyle === 'achievements' ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
@@ -293,14 +310,16 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
                 <button 
                     onClick={() => handleGrammarCheck(toText(resume.achievements), 'achievements')}
                     disabled={aiLoading}
-                    className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100 hover:bg-green-100 transition-colors"
+                    className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 border border-emerald-200 hover:bg-emerald-100 transition-colors"
+                    style={{ borderRadius: '2px' }}
                 >
                     {t('editor.grammar')}
                 </button>
                 <button 
                     onClick={() => enhanceWithAI('achievements', 0)}
                     disabled={aiLoading}
-                    className="text-[10px] font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded border border-primary-100 hover:bg-primary-100 transition-colors flex items-center gap-1"
+                    className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 border border-blue-200 hover:bg-blue-100 transition-colors flex items-center gap-1 uppercase tracking-wider"
+                    style={{ borderRadius: '2px' }}
                 >
                     <Wand2 className="w-3 h-3" />
                     ENHANCE
@@ -318,7 +337,8 @@ const OtherSectionsEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCh
               ...resume, 
               achievements: e.target.value.split('\n').filter(s => s.trim())
             })}
-            className="block w-full rounded-md border border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm bg-white text-slate-900 p-2.5 resize-none"
+            className="block w-full border border-rule focus:border-blue-500 text-sm bg-white text-ink p-3 resize-none outline-none transition-colors"
+            style={{ borderRadius: '2px' }}
           />
         </section>
       )}

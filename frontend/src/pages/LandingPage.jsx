@@ -3,7 +3,6 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   ArrowRight,
-  Sparkles,
   Zap,
   Layout,
   Download,
@@ -23,38 +22,16 @@ import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { assets } from '../data/visualTemplates';
 
-/* ─── tiny helpers ──────────────────────────────────────────── */
-
-/** Dot-grid SVG data-uri backdrop */
-const DOT_GRID =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='1' cy='1' r='1' fill='%236366f1' fill-opacity='0.12'/%3E%3C/svg%3E\")";
-
-/** Reusable float animation wrapper (pure CSS keyframes injected once) */
-const floatStyle = (delay = 0, duration = 6) => ({
-  animation: `heroFloat ${duration}s ease-in-out ${delay}s infinite`,
-});
-
+/* ─── keyframes ──────────────────────────────────────────── */
 const GLOBAL_KEYFRAMES = `
-  @keyframes heroFloat {
-    0%,100% { transform: translateY(0px) rotate(var(--rot,0deg)); }
-    50%      { transform: translateY(-12px) rotate(var(--rot,0deg)); }
+  @keyframes docIn {
+    from { opacity: 0; transform: translateX(24px) rotate(0deg); }
+    to   { opacity: 1; transform: translateX(0) rotate(-2.2deg); }
   }
-  @keyframes blobDrift {
-    0%,100% { transform: translate(0,0) scale(1); }
-    33%     { transform: translate(30px,-20px) scale(1.05); }
-    66%     { transform: translate(-20px,10px) scale(0.97); }
-  }
+  @keyframes blink { 50% { opacity: 0; } }
   @keyframes infiniteScroll {
     0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
-  }
-  @keyframes spinSlow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  @keyframes spinSlowRev {
-    from { transform: rotate(360deg); }
-    to { transform: rotate(0deg); }
   }
   .animate-infinite-scroll {
     display: flex;
@@ -64,214 +41,72 @@ const GLOBAL_KEYFRAMES = `
   .animate-infinite-scroll:hover { animation-play-state: paused; }
 `;
 
-/* ─── Floating card components ──────────────────────────────── */
-
-const ScoreCard = () => (
-  <div
-    className="absolute left-[-30px] sm:left-[-60px] top-[18%] z-20 hidden sm:flex flex-col gap-1 bg-white/90 border border-slate-200/80 rounded-2xl px-4 py-3 shadow-card w-[148px]"
-    style={{ ...floatStyle(0.5, 7), '--rot': '-2deg' }}
-  >
-    <div className="flex items-center justify-between mb-1">
-      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Resume Score</span>
-      <Award className="w-3.5 h-3.5 text-amber-400" />
-    </div>
-    <div className="flex items-end gap-1">
-      <span className="text-3xl font-extrabold text-slate-900 leading-none">92</span>
-      <span className="text-sm font-bold text-slate-400 mb-0.5">%</span>
-    </div>
-    <div className="w-full h-1.5 rounded-full bg-slate-100 mt-1 overflow-hidden">
-      <div className="h-full rounded-full bg-gradient-to-r from-primary-500 to-indigo-500" style={{ width: '92%' }} />
-    </div>
-    <span className="text-[10px] text-emerald-600 font-semibold mt-0.5">↑ Great score!</span>
-  </div>
-);
-
-const ATSCard = () => (
-  <div
-    className="absolute right-[-20px] sm:right-[-55px] top-[12%] z-20 hidden sm:flex items-center gap-2.5 bg-white/90 border border-slate-200/80 rounded-2xl px-4 py-3 shadow-card"
-    style={{ ...floatStyle(1.5, 8), '--rot': '2deg' }}
-  >
-    <div className="w-7 h-7 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center flex-shrink-0">
-      <Check className="w-4 h-4 text-emerald-500" />
-    </div>
-    <div>
-      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">ATS Friendly</div>
-      <div className="text-xs font-bold text-slate-800">Optimised</div>
-    </div>
-  </div>
-);
-
-const QuickCard = () => (
-  <div
-    className="absolute right-[-20px] sm:right-[-65px] bottom-[10%] z-20 hidden sm:flex items-center gap-2.5 bg-white/90 border border-slate-200/80 rounded-2xl px-4 py-3 shadow-card"
-    style={{ ...floatStyle(0, 6.5), '--rot': '2deg' }}
-  >
-    <div className="w-7 h-7 rounded-xl bg-primary-50 border border-primary-100 flex items-center justify-center flex-shrink-0">
-      <Zap className="w-4 h-4 text-primary-500" />
-    </div>
-    <div>
-      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Built in</div>
-      <div className="text-xs font-bold text-slate-800">Under 5 mins</div>
-    </div>
-  </div>
-);
-
-/* Mini resume preview card */
+/* ─── Editorial Resume Preview ──────────────────────────── */
 const ResumePreviewCard = () => (
   <div
-    className="w-full bg-white rounded-2xl shadow-[0_8px_40px_-8px_rgba(15,23,42,0.18)] ring-1 ring-slate-900/8 overflow-hidden"
-    style={{ ...floatStyle(1, 7), '--rot': '0deg' }}
+    className="relative z-[2] bg-white w-full max-w-[560px] border shadow-doc flex flex-col gap-[18px]"
+    style={{
+      padding: '44px 46px',
+      borderColor: '#E7E1D2',
+      aspectRatio: '8.5/10.6',
+      fontFamily: '"Public Sans", sans-serif',
+      animation: 'docIn 1.1s cubic-bezier(.2,.8,.2,1) both',
+    }}
   >
-    {/* Resume header accent */}
-    <div className="h-1.5 w-full bg-gradient-to-r from-primary-500 to-indigo-500" />
-    <div className="p-5">
-      {/* Name block */}
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <div className="w-28 h-3.5 rounded-full bg-slate-900 mb-1.5" />
-          <div className="w-20 h-2 rounded-full bg-slate-300" />
-        </div>
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-100 to-indigo-100 flex-shrink-0" />
+    {/* Header */}
+    <div style={{ borderBottom: '2px solid #16202B', paddingBottom: '14px' }}>
+      <div className="font-serif text-[29px] font-semibold" style={{ letterSpacing: '-0.01em', color: '#16202B' }}>Maya Ortiz</div>
+      <div className="text-[13.5px] font-semibold mt-[3px]" style={{ color: '#2E4A9E' }}>Senior Product Designer</div>
+      <div className="mt-[10px] flex gap-[14px] flex-wrap text-[11px]" style={{ color: '#4A5560' }}>
+        <span>maya.ortiz@email.com</span>
+        <span>+1 (415) 555-0134</span>
+        <span>San Francisco, CA</span>
+        <span>maya-ortiz.design</span>
       </div>
-      {/* Contact row */}
-      <div className="flex gap-2 mb-4">
-        {[40, 52, 36].map((w, i) => (
-          <div key={i} className="h-1.5 rounded-full bg-slate-200" style={{ width: w }} />
+    </div>
+
+    {/* Summary */}
+    <div>
+      <div className="text-[10.5px] font-bold uppercase tracking-[0.06em] pb-[5px] mb-[9px]" style={{ color: '#16202B', borderBottom: '1px solid #D9D2C0' }}>Summary</div>
+      <p className="text-[11.5px] leading-[1.55]" style={{ color: '#4A5560' }}>
+        Product designer with 8 years building design systems and 0–1 products for growth-stage teams. Focused on clarity, craft, and shipping things that hold up.
+      </p>
+    </div>
+
+    {/* Experience */}
+    <div>
+      <div className="text-[10.5px] font-bold uppercase tracking-[0.06em] pb-[5px] mb-[9px]" style={{ color: '#16202B', borderBottom: '1px solid #D9D2C0' }}>Experience</div>
+      <div className="mb-[10px]">
+        <div className="flex justify-between text-[12px] font-semibold"><span>Senior Product Designer, Northbeam</span><span>2021 — Present</span></div>
+        <div className="text-[11px] italic mt-[1px]" style={{ color: '#4A5560' }}>Led the design system used across 6 product teams</div>
+        <ul className="mt-[6px] pl-[14px] list-disc">
+          <li className="text-[11px] mb-[3px] leading-[1.45]" style={{ color: '#4A5560' }}>Reduced design-to-ship time by 34% with a shared component library</li>
+          <li className="text-[11px] mb-[3px] leading-[1.45]" style={{ color: '#4A5560' }}>Ran the redesign of the core onboarding flow, lifting activation 18%</li>
+        </ul>
+      </div>
+      <div className="mb-[10px]">
+        <div className="flex justify-between text-[12px] font-semibold"><span>Product Designer, Fieldstone</span><span>2018 — 2021</span></div>
+        <div className="text-[11px] italic mt-[1px]" style={{ color: '#4A5560' }}>First design hire, reporting to the founder</div>
+      </div>
+    </div>
+
+    {/* Education */}
+    <div>
+      <div className="text-[10.5px] font-bold uppercase tracking-[0.06em] pb-[5px] mb-[9px]" style={{ color: '#16202B', borderBottom: '1px solid #D9D2C0' }}>Education</div>
+      <div className="flex justify-between text-[12px] font-semibold"><span>B.F.A., Graphic Design — RISD</span><span>2018</span></div>
+    </div>
+
+    {/* Skills */}
+    <div>
+      <div className="text-[10.5px] font-bold uppercase tracking-[0.06em] pb-[5px] mb-[9px]" style={{ color: '#16202B', borderBottom: '1px solid #D9D2C0' }}>Skills</div>
+      <div className="flex flex-wrap gap-[6px_10px]">
+        {['Design systems', 'Figma', 'Prototyping', 'Research', 'Typography'].map((s) => (
+          <span key={s} className="text-[10.5px] px-[9px] py-[3px]" style={{ color: '#16202B', border: '1px solid #B9AF98', borderRadius: '1px' }}>{s}</span>
         ))}
-      </div>
-      {/* Section: Experience */}
-      <div className="mb-3">
-        <div className="w-16 h-1.5 rounded-full bg-primary-400 mb-2" />
-        <div className="space-y-1.5">
-          {[70, 90, 55].map((w, i) => (
-            <div key={i} className="h-1.5 rounded-full bg-slate-200" style={{ width: `${w}%` }} />
-          ))}
-        </div>
-      </div>
-      {/* Section: Skills */}
-      <div className="mb-3">
-        <div className="w-10 h-1.5 rounded-full bg-primary-400 mb-2" />
-        <div className="flex flex-wrap gap-1.5">
-          {[30, 40, 28, 36, 32].map((w, i) => (
-            <div key={i} className="h-4 rounded-md bg-primary-50 border border-primary-100" style={{ width: w }} />
-          ))}
-        </div>
-      </div>
-      {/* Section: Education */}
-      <div>
-        <div className="w-16 h-1.5 rounded-full bg-primary-400 mb-2" />
-        <div className="space-y-1.5">
-          {[60, 80].map((w, i) => (
-            <div key={i} className="h-1.5 rounded-full bg-slate-200" style={{ width: `${w}%` }} />
-          ))}
-        </div>
       </div>
     </div>
   </div>
 );
-
-/* ─── Sparkle & Floating Decorative Shapes ────────────────── */
-
-const Sparkle = ({ top, left, right, bottom, size = 16, delay = 0, duration = 6, color = '#6366f1', opacity = 0.6, style = {} }) => (
-  <div
-    className="absolute pointer-events-none select-none z-10"
-    style={{
-      top, left, right, bottom,
-      animation: `heroFloat ${duration}s ease-in-out ${delay}s infinite`,
-      opacity,
-      ...style
-    }}
-  >
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      <path
-        d="M12 0C12 6.627 6.627 12 0 12C6.627 12 12 17.373 12 24C12 17.373 17.373 12 24 12C17.373 12 12 6.627 12 0Z"
-        fill={color}
-      />
-    </svg>
-  </div>
-);
-
-const FloatingParticle = ({ type = 'circle', top, left, right, bottom, size = 12, delay = 0, duration = 7, className = '', style = {} }) => {
-  const animStyle = {
-    top, left, right, bottom,
-    animation: `heroFloat ${duration}s ease-in-out ${delay}s infinite`,
-    ...style
-  };
-
-  if (type === 'dot') {
-    return (
-      <div
-        className={`absolute pointer-events-none select-none rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.6)] ${className}`}
-        style={{ width: size, height: size, ...animStyle }}
-      />
-    );
-  }
-
-  if (type === 'ring') {
-    return (
-      <div
-        className={`absolute pointer-events-none select-none rounded-full border border-dashed border-indigo-400/40 ${className}`}
-        style={{
-          width: size,
-          height: size,
-          animation: `heroFloat ${duration}s ease-in-out ${delay}s infinite, spinSlow ${duration * 3}s linear infinite`,
-          ...style
-        }}
-      />
-    );
-  }
-
-  if (type === 'halo') {
-    return (
-      <div
-        className={`absolute pointer-events-none select-none rounded-full border-2 border-indigo-300/30 bg-indigo-500/10 backdrop-blur-[1px] ${className}`}
-        style={{ width: size, height: size, ...animStyle }}
-      />
-    );
-  }
-
-  if (type === 'diamond') {
-    return (
-      <div
-        className={`absolute pointer-events-none select-none rounded-sm bg-gradient-to-br from-amber-400 to-orange-500 opacity-70 shadow-sm ${className}`}
-        style={{
-          width: size,
-          height: size,
-          transform: 'rotate(45deg)',
-          ...animStyle
-        }}
-      />
-    );
-  }
-
-  if (type === 'plus') {
-    return (
-      <div
-        className={`absolute pointer-events-none select-none text-indigo-400/50 font-black leading-none ${className}`}
-        style={{ fontSize: size, ...animStyle }}
-      >
-        +
-      </div>
-    );
-  }
-
-  if (type === 'triangle') {
-    return (
-      <div className={`absolute pointer-events-none select-none ${className}`} style={animStyle}>
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-          <polygon points="12,2 22,22 2,22" stroke="#6366f1" strokeWidth="2.5" strokeOpacity="0.45" fill="rgba(99,102,241,0.08)" />
-        </svg>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className={`absolute pointer-events-none select-none rounded-full border border-primary-300/40 ${className}`}
-      style={{ width: size, height: size, ...animStyle }}
-    />
-  );
-};
 
 /* ─── Main Component ─────────────────────────────────────────── */
 const LandingPage = () => {
@@ -305,10 +140,10 @@ const LandingPage = () => {
   };
 
   const features = [
-    { icon: <Zap className="w-5 h-5" />, title: t('features.easyTitle'), description: t('features.easyDesc'), color: 'from-amber-500 to-orange-500' },
-    { icon: <Layout className="w-5 h-5" />, title: t('features.profTitle'), description: t('features.profDesc'), color: 'from-primary-500 to-indigo-500' },
-    { icon: <Download className="w-5 h-5" />, title: t('features.downTitle'), description: t('features.downDesc'), color: 'from-emerald-500 to-teal-500' },
-    { icon: <MousePointerClick className="w-5 h-5" />, title: t('features.fastTitle'), description: t('features.fastDesc'), color: 'from-violet-500 to-purple-500' },
+    { icon: <Zap className="w-5 h-5" />, title: t('features.easyTitle'), description: t('features.easyDesc') },
+    { icon: <Layout className="w-5 h-5" />, title: t('features.profTitle'), description: t('features.profDesc') },
+    { icon: <Download className="w-5 h-5" />, title: t('features.downTitle'), description: t('features.downDesc') },
+    { icon: <MousePointerClick className="w-5 h-5" />, title: t('features.fastTitle'), description: t('features.fastDesc') },
   ];
 
   const values = [
@@ -331,285 +166,171 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen font-sans overflow-x-hidden">
-      {/* Inject keyframes once */}
+    <div className="bg-paper min-h-screen font-sans overflow-x-hidden">
       <style>{GLOBAL_KEYFRAMES}</style>
 
       {/* ══════════════════════════════════════════════════════
           HERO
       ══════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[90vh] flex flex-col justify-center pt-16 pb-24 lg:pt-20 lg:pb-32 overflow-hidden">
+      <section className="rails relative min-h-[82vh] flex items-center" style={{ padding: '0 clamp(32px, 6.5vw, 110px)' }}>
+        <div className="max-w-[1360px] mx-auto w-full grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-8 lg:gap-12 items-center">
 
-        {/* ── Layer 0: dot grid ── */}
-        <div
-          className="absolute inset-0 -z-20 pointer-events-none"
-          style={{ backgroundImage: DOT_GRID, backgroundSize: '24px 24px' }}
-        />
+          {/* LEFT: headline + CTA */}
+          <div className="py-[60px] pl-0 lg:pl-6 pr-0 lg:pr-6">
 
-        {/* ── Layer 1: soft blobs ── */}
-        <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
-          <div
-            className="absolute w-[600px] h-[600px] rounded-full opacity-40"
-            style={{
-              background: 'radial-gradient(circle, rgba(37,99,235,0.18) 0%, transparent 70%)',
-              top: '-15%', left: '-10%',
-              animation: 'blobDrift 18s ease-in-out infinite',
-            }}
-          />
-          <div
-            className="absolute w-[500px] h-[500px] rounded-full opacity-30"
-            style={{
-              background: 'radial-gradient(circle, rgba(99,102,241,0.16) 0%, transparent 70%)',
-              top: '10%', right: '-5%',
-              animation: 'blobDrift 22s ease-in-out 6s infinite',
-            }}
-          />
-          <div
-            className="absolute w-[400px] h-[400px] rounded-full opacity-25"
-            style={{
-              background: 'radial-gradient(circle, rgba(59,130,246,0.14) 0%, transparent 70%)',
-              bottom: '0%', left: '40%',
-              animation: 'blobDrift 15s ease-in-out 3s infinite',
-            }}
-          />
-          {/* Very subtle top radial sweep */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_-5%,rgba(37,99,235,0.07)_0%,transparent_65%)]" />
-        </div>
+            {/* Kicker */}
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex items-center gap-[10px] mb-7 text-[13.5px] font-semibold text-ink-soft"
+            >
+              <span className="w-[7px] h-[7px] bg-pen inline-block" style={{ transform: 'rotate(45deg)' }} />
+              A resume builder, not a template shop
+            </motion.div>
 
-        {/* ── Sparkles & Particles across background ── */}
-        <Sparkle top="10%" left="6%" size={14} delay={0} color="#6366f1" opacity={0.4} />
-        <Sparkle top="18%" left="20%" size={10} delay={1} color="#2563eb" opacity={0.35} />
-        <Sparkle top="65%" left="4%" size={12} delay={1.5} color="#6366f1" opacity={0.3} />
+            {/* Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, ease: [0.215, 0.61, 0.355, 1] }}
+              className="font-serif text-ink leading-[1.08] mb-6"
+              style={{ fontSize: 'clamp(38px, 4.4vw, 58px)', fontWeight: 500, letterSpacing: '-0.01em' }}
+            >
+              {t('hero.title1')}<br />
+              <em className="italic font-normal text-blue-500">{t('hero.titleAccent')}</em>
+              <br />{t('hero.title2')}
+            </motion.h1>
 
-        {/* Extra sparkles emphasizing the right side background */}
-        <Sparkle top="6%" right="28%" size={16} delay={0.4} color="#3b82f6" opacity={0.5} />
-        <Sparkle top="14%" right="8%" size={18} delay={1.2} color="#6366f1" opacity={0.6} />
-        <Sparkle top="45%" right="4%" size={12} delay={2.0} color="#f59e0b" opacity={0.55} />
-        <Sparkle top="72%" right="12%" size={20} delay={0.8} color="#2563eb" opacity={0.45} />
-        <Sparkle top="82%" right="25%" size={14} delay={1.6} color="#6366f1" opacity={0.5} />
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.12, duration: 0.55, ease: [0.215, 0.61, 0.355, 1] }}
+              className="text-[17px] leading-[1.6] text-ink-soft mb-10 max-w-[38ch]"
+            >
+              {t('hero.subtitle')}
+            </motion.p>
 
-        {/* Small floating geometric background shapes */}
-        <FloatingParticle type="circle" top="28%" left="3%" size={20} delay={0.8} duration={9} />
-        <FloatingParticle type="diamond" top="54%" left="7%" size={12} delay={2.0} duration={8} />
-        <FloatingParticle type="plus" top="22%" left="15%" size={18} delay={1.5} duration={7} />
-
-        <FloatingParticle type="ring" top="20%" right="4%" size={48} delay={1.2} duration={12} />
-        <FloatingParticle type="halo" top="58%" right="5%" size={32} delay={0.3} duration={10} />
-        <FloatingParticle type="triangle" top="75%" right="15%" size={22} delay={2.4} duration={8} />
-
-        {/* ── Content ── */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-
-            {/* LEFT: headline + CTA */}
-            <div className="flex-1 text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
-
-              {/* Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 border border-primary-200/80 text-primary-700 text-sm font-semibold mb-7 shadow-sm"
-              >
-
-              </motion.div>
-
-              {/* Headline */}
-              <motion.h1
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.65, ease: [0.215, 0.61, 0.355, 1] }}
-                className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.04] mb-6"
-              >
-                {t('hero.title1')}<br />
-                <span
-                  className="bg-clip-text text-transparent"
-                  style={{ backgroundImage: 'linear-gradient(135deg, #2563eb 0%, #6366f1 100%)' }}
-                >
-                  {t('hero.titleAccent')}
-                </span>
-                <br />{t('hero.title2')}
-              </motion.h1>
-
-              {/* Subtitle */}
-              <motion.p
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.12, duration: 0.55, ease: [0.215, 0.61, 0.355, 1] }}
-                className="text-lg sm:text-xl text-slate-500 mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0"
-              >
-                {t('hero.subtitle')}
-              </motion.p>
-
-              {/* CTA block */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.22, duration: 0.5 }}
-                className="flex flex-col items-center lg:items-start gap-4"
-              >
-                {!user ? (
-                  <>
-                    {/* Primary CTA */}
-                    <button
-                      onClick={() => navigate('/dashboard')}
-                      className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-base sm:text-lg transition-colors duration-200 cursor-pointer shadow-sm"
-                    >
-                      {t('hero.buildBtn')}
-                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
-                    </button>
-
-                    {/* Divider */}
-                    <div className="flex items-center gap-3 w-full max-w-[320px] mx-auto lg:mx-0">
-                      <div className="flex-1 h-px bg-slate-200" />
-                      <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">or</span>
-                      <div className="flex-1 h-px bg-slate-200" />
-                    </div>
-
-                    {/* Google login */}
-                    <div className="flex justify-center lg:justify-start" ref={googleLoginRef}>
-                      <GoogleLogin
-                        onSuccess={handleGoogleSuccess}
-                        onError={() => console.error('Login Failed')}
-                        text="continue_with"
-                        size="large"
-                        theme="outline"
-                        shape="rectangular"
-                      />
-                    </div>
-                  </>
-                ) : (
+            {/* CTA block */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.22, duration: 0.5 }}
+              className="flex items-center gap-[22px] flex-wrap"
+            >
+              {!user ? (
+                <>
                   <button
                     onClick={() => navigate('/dashboard')}
-                    className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-lg transition-colors duration-200 cursor-pointer shadow-sm"
+                    className="group inline-flex items-center gap-[10px] px-[26px] py-[15px] text-[15px] font-semibold text-paper border-none cursor-pointer"
+                    style={{ background: '#2E4A9E', borderRadius: '2px', transition: 'transform .25s cubic-bezier(.2,.8,.2,1), background .2s ease' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = '#1C2E63'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = '#2E4A9E'; e.currentTarget.style.transform = 'translateY(0)'; }}
                   >
-                    Go to Dashboard
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+                    {t('hero.buildBtn')}
+                    <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
                   </button>
-                )}
-              </motion.div>
+                  <span className="text-[13px] text-ink-soft">Free to start · <b className="text-ink font-semibold">No design skills needed</b></span>
+                </>
+              ) : (
+                <button
+                  onClick={() => navigate('/dashboard')}
+                  className="group inline-flex items-center gap-[10px] px-[26px] py-[15px] text-[15px] font-semibold text-paper border-none cursor-pointer"
+                  style={{ background: '#2E4A9E', borderRadius: '2px', transition: 'transform .25s cubic-bezier(.2,.8,.2,1), background .2s ease' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = '#1C2E63'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = '#2E4A9E'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                >
+                  Go to Dashboard
+                  <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
+                </button>
+              )}
+            </motion.div>
 
-              {/* Social proof */}
+            {/* Google login (still visible for non-logged-in under CTA) */}
+            {!user && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.45, duration: 0.6 }}
-                className="flex items-center gap-3 mt-8 justify-center lg:justify-start"
+                className="mt-6 flex flex-col gap-3"
               >
-
+                <div className="flex items-center gap-3 w-full max-w-[320px]">
+                  <div className="flex-1 h-px bg-rule" />
+                  <span className="text-xs font-semibold text-ink-soft uppercase tracking-wider">or</span>
+                  <div className="flex-1 h-px bg-rule" />
+                </div>
+                <div ref={googleLoginRef}>
+                  <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={() => console.error('Login Failed')}
+                    text="continue_with"
+                    size="large"
+                    theme="outline"
+                    shape="rectangular"
+                  />
+                </div>
               </motion.div>
-            </div>
+            )}
+          </div>
 
-            {/* RIGHT: Resume preview + Social proof composition */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.215, 0.61, 0.355, 1] }}
-              className="flex-1 hidden lg:block relative w-full max-w-[420px] mx-auto"
-            >
-              {/* Soft subtle radial glow behind preview */}
+          {/* RIGHT: Resume preview */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.215, 0.61, 0.355, 1] }}
+            className="hidden lg:flex relative h-full items-center justify-center lg:justify-end pt-10"
+          >
+            <div className="relative w-full max-w-[540px]">
+              {/* Shadow card behind */}
               <div
-                className="absolute inset-[-15%] rounded-full -z-10 pointer-events-none opacity-50 blur-3xl"
+                className="absolute z-[1]"
                 style={{
-                  background: 'radial-gradient(circle, rgba(37,99,235,0.14) 0%, rgba(99,102,241,0.08) 50%, transparent 80%)',
+                  inset: '12px -16px -16px 16px',
+                  background: '#F0EAD9',
+                  border: '1px solid #B9AF98',
+                  transform: 'rotate(1.4deg)',
                 }}
               />
+              <ResumePreviewCard />
+            </div>
+          </motion.div>
 
-              {/* ── RIGHT HERO DEDICATED FLOATING DECORATIVE PARTICLES ── */}
-              {/* Top-Right floating cluster */}
-              <Sparkle top="-32px" right="-28px" size={22} delay={0.2} color="#f59e0b" opacity={0.85} />
-              <Sparkle top="-15px" right="65px" size={14} delay={1.4} color="#6366f1" opacity={0.7} />
-              <FloatingParticle type="ring" top="-45px" right="-10px" size={60} delay={0.1} duration={10} />
-              <FloatingParticle type="dot" top="-22px" right="110px" size={10} delay={0.7} duration={6} />
-              <FloatingParticle type="diamond" top="-18px" right="-45px" size={14} delay={1.8} duration={7} />
+        </div>
+      </section>
 
-              {/* Top-Left floating cluster above ScoreCard */}
-              <Sparkle top="-25px" left="-20px" size={18} delay={0.9} color="#2563eb" opacity={0.75} />
-              <FloatingParticle type="halo" top="-38px" left="-48px" size={44} delay={1.3} duration={8} />
-              <FloatingParticle type="plus" top="15px" left="-58px" size={20} delay={2.1} duration={6} />
-
-              {/* Middle-Right floating particles (Beside ATS & Quick cards) */}
-              <Sparkle top="26%" right="-55px" size={20} delay={0.5} color="#8b5cf6" opacity={0.8} />
-              <FloatingParticle type="triangle" top="36%" right="-68px" size={22} delay={1.6} duration={7} />
-              <FloatingParticle type="dot" top="48%" right="-42px" size={12} delay={0.4} duration={5} />
-              <FloatingParticle type="ring" top="42%" right="-78px" size={48} delay={1.1} duration={11} />
-              <FloatingParticle type="diamond" top="58%" right="-64px" size={12} delay={2.3} duration={8} />
-
-              {/* Middle-Left floating particles (Beside Score Card & Preview) */}
-              <Sparkle top="34%" left="-48px" size={16} delay={1.1} color="#f59e0b" opacity={0.75} />
-              <FloatingParticle type="halo" top="46%" left="-72px" size={38} delay={0.6} duration={9} />
-              <FloatingParticle type="dot" top="58%" left="-52px" size={10} delay={1.9} duration={6} />
-              <Sparkle top="66%" left="-38px" size={14} delay={0.3} color="#2563eb" opacity={0.65} />
-
-              {/* Bottom right & bottom left floating cluster around Social Proof */}
-              <Sparkle bottom="-18px" right="25px" size={20} delay={2.2} color="#6366f1" opacity={0.8} />
-              <Sparkle bottom="35px" right="-52px" size={16} delay={1.0} color="#10b981" opacity={0.7} />
-              <FloatingParticle type="ring" bottom="-28px" right="-35px" size={54} delay={0.8} duration={12} />
-              <FloatingParticle type="plus" bottom="42px" right="-48px" size={18} delay={1.4} duration={7} />
-              <FloatingParticle type="diamond" bottom="-16px" left="-30px" size={14} delay={0.5} duration={8} />
-              <Sparkle bottom="24px" left="-45px" size={16} delay={1.7} color="#ec4899" opacity={0.7} />
-
-              {/* Floating preview card composition */}
-              <div className="relative z-10" style={{ transform: 'rotate(2deg)' }}>
-                <ScoreCard />
-                <ATSCard />
-                <QuickCard />
-                <ResumePreviewCard />
-              </div>
-
-              {/* Integrated Right-Side Social Proof Section */}
-              <div className="mt-8 bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-4 shadow-card flex items-center gap-4 transition-all duration-300 hover:shadow-card-hover relative z-10">
-                {/* Overlapping User Avatars */}
-                <div className="flex -space-x-2.5 flex-shrink-0">
-                  {[
-                    'from-blue-500 to-indigo-600',
-                    'from-indigo-500 to-purple-600',
-                    'from-violet-500 to-pink-500',
-                    'from-emerald-400 to-teal-500',
-                    'from-sky-400 to-blue-600'
-                  ].map((g, i) => (
-                    <div
-                      key={i}
-                      className={`w-9 h-9 rounded-full bg-gradient-to-br ${g} ring-2 ring-white shadow-sm flex items-center justify-center text-xs font-bold text-white transition-transform hover:scale-110 hover:z-30`}
-                      style={{ transform: `translateY(${i % 2 === 0 ? '0px' : '-2px'})` }}
-                    >
-                      {['A', 'J', 'K', 'M', 'R'][i]}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Rating & Social Text */}
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-1 mb-0.5">
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                      ))}
-                    </div>
-                    <span className="text-xs font-bold text-slate-800 ml-1">5.0</span>
-                  </div>
-                  <div className="text-sm font-bold text-slate-900 leading-tight">
-                    Loved by 1,000+ job seekers
-                  </div>
-                  <div className="text-xs text-slate-500 font-medium mt-0.5">
-                    Join thousands of professionals building better resumes.
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
+      {/* ══════════════════════════════════════════════════════
+          PROBLEM STATEMENT (editorial)
+      ══════════════════════════════════════════════════════ */}
+      <section className="rails" style={{ maxWidth: '1360px', margin: '0 auto', padding: '120px clamp(32px, 6.5vw, 110px)' }}>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1px_1.3fr] gap-8 lg:gap-16 items-start px-2 sm:px-6 lg:px-8">
+          <div className="pt-[6px]">
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-2 text-xs font-bold text-pen uppercase tracking-widest bg-paper-dim border border-rule" style={{ borderRadius: '2px' }}>
+              <span className="w-1.5 h-1.5 bg-pen rotate-45 inline-block" />
+              01 / The Problem
+            </div>
           </div>
+          <div className="hidden lg:block bg-rule h-full" />
+          <p
+            className="font-serif italic leading-[1.35] text-ink lg:pl-4"
+            style={{ fontSize: 'clamp(26px, 3vw, 40px)', fontWeight: 400, maxWidth: '22ch' }}
+          >
+            Most resumes look identical because most resume tools give everyone the{' '}
+            <span className="not-italic font-medium text-blue-500" style={{ borderBottom: '2px solid #A6402D' }}>same three boxes</span>{' '}
+            to fill in — a name, a job, a paragraph — and call the result a template.
+          </p>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════
           FEATURES
       ══════════════════════════════════════════════════════ */}
-      <section id="features" className="py-24 bg-slate-50/80 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div {...fadeUp} className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">{t('features.title')}</h2>
-            <p className="text-lg text-slate-500 max-w-2xl mx-auto">{t('features.subtitle')}</p>
+      <section id="features" className="rails py-24 overflow-hidden" style={{ maxWidth: '1360px', margin: '0 auto', padding: '120px clamp(32px, 6.5vw, 110px)' }}>
+        <div className="px-2 sm:px-6 lg:px-8">
+          <motion.div {...fadeUp} className="mb-14">
+            <div className="text-[13px] text-ink-soft font-semibold mb-5 uppercase tracking-wider">The ALRes builder</div>
+            <h2 className="font-serif text-ink leading-[1.2] mb-4" style={{ fontSize: 'clamp(28px,3vw,40px)' }}>{t('features.title')}</h2>
+            <p className="text-ink-soft text-[16px] max-w-[52ch]">{t('features.subtitle')}</p>
           </motion.div>
 
           <motion.div
@@ -617,19 +338,20 @@ const LandingPage = () => {
             initial="initial"
             whileInView="whileInView"
             viewport={{ once: true, amount: 0.05 }}
-            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"
+            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-7"
           >
             {features.map((f, i) => (
               <motion.div
                 key={i}
                 variants={fadeUp}
-                className="group bg-white p-7 rounded-3xl border border-slate-100 shadow-card hover:shadow-card-hover hover:-translate-y-1.5 transition-all duration-300"
+                className="group bg-white p-7 border border-rule hover:border-blue-500 hover:-translate-y-1.5 transition-all duration-300"
+                style={{ borderRadius: '2px' }}
               >
-                <div className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${f.color} text-white flex items-center justify-center mb-5 shadow-sm group-hover:scale-110 transition-transform duration-300`}>
+                <div className="w-11 h-11 bg-ink text-paper flex items-center justify-center mb-5 group-hover:bg-blue-500 transition-colors duration-300" style={{ borderRadius: '2px' }}>
                   {f.icon}
                 </div>
-                <h3 className="text-base font-bold text-slate-900 mb-2">{f.title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{f.description}</p>
+                <h3 className="text-base font-bold text-ink mb-2" style={{ fontFamily: '"Public Sans", sans-serif' }}>{f.title}</h3>
+                <p className="text-ink-soft text-sm leading-relaxed">{f.description}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -637,20 +359,22 @@ const LandingPage = () => {
       </section>
 
       {/* ══════════════════════════════════════════════════════
-          WHY / VALUES  (dark section)
+          WHY / VALUES (dark ink section)
       ══════════════════════════════════════════════════════ */}
       <section
         className="py-24 relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg,#0f172a 0%,#0f1e3a 45%,#1e1b4b 100%)' }}
+        style={{ background: '#16202B', padding: '140px clamp(32px, 6.5vw, 110px)' }}
       >
-        <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: DOT_GRID, backgroundSize: '24px 24px', opacity: 0.06 }} />
-        <div className="absolute top-[-10%] left-[-5%] w-[45%] h-[70%] bg-primary-800/25 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[60%] bg-indigo-800/20 rounded-full blur-[100px] pointer-events-none" />
+        {/* Corner marks */}
+        <div className="max-w-[1360px] mx-auto relative px-2 sm:px-6 lg:px-8">
+          <span className="absolute w-[22px] h-[22px]" style={{ top: '-70px', left: '16px', borderTop: '1px solid rgba(250,247,241,0.4)', borderLeft: '1px solid rgba(250,247,241,0.4)' }} />
+          <span className="absolute w-[22px] h-[22px]" style={{ top: '-70px', right: '16px', borderTop: '1px solid rgba(250,247,241,0.4)', borderRight: '1px solid rgba(250,247,241,0.4)' }} />
+          <span className="absolute w-[22px] h-[22px]" style={{ bottom: '-70px', left: '16px', borderBottom: '1px solid rgba(250,247,241,0.4)', borderLeft: '1px solid rgba(250,247,241,0.4)' }} />
+          <span className="absolute w-[22px] h-[22px]" style={{ bottom: '-70px', right: '16px', borderBottom: '1px solid rgba(250,247,241,0.4)', borderRight: '1px solid rgba(250,247,241,0.4)' }} />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div {...fadeUp} className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Why Job Seekers Love ALRes</h2>
-            <p className="text-lg text-slate-300 max-w-2xl mx-auto">Designed by students, for students and job seekers.</p>
+            <h2 className="font-serif text-white mb-4" style={{ fontSize: 'clamp(28px,3vw,40px)', fontWeight: 500 }}>Why Job Seekers Love ALRes</h2>
+            <p className="text-[16px] max-w-2xl mx-auto font-medium" style={{ color: '#E7E1D2' }}>Designed by students, for students and job seekers.</p>
           </motion.div>
 
           <motion.div
@@ -658,19 +382,22 @@ const LandingPage = () => {
             initial="initial"
             whileInView="whileInView"
             viewport={{ once: true, amount: 0.05 }}
-            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"
+            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
           >
             {values.map((v, i) => (
               <motion.div
                 key={i}
                 variants={fadeUp}
-                className="bg-white/[0.06] p-7 rounded-2xl border border-white/10 hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 group"
+                className="p-7 border hover:-translate-y-1 transition-all duration-300 group"
+                style={{ background: 'rgba(250,247,241,0.06)', borderColor: 'rgba(250,247,241,0.18)', borderRadius: '2px' }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(250,247,241,0.12)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(250,247,241,0.06)'; }}
               >
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500/30 to-indigo-500/30 border border-white/10 flex items-center justify-center text-white mb-5 group-hover:scale-110 transition-transform duration-300">
+                <div className="w-11 h-11 border flex items-center justify-center text-white mb-5 group-hover:scale-110 transition-transform duration-300" style={{ background: '#2E4A9E', borderColor: 'rgba(250,247,241,0.25)', borderRadius: '2px' }}>
                   {v.icon}
                 </div>
-                <h3 className="text-base font-bold text-white mb-2">{v.title}</h3>
-                <p className="text-slate-300 text-sm leading-relaxed">{v.description}</p>
+                <h3 className="text-base font-bold text-white mb-2" style={{ fontFamily: '"Public Sans", sans-serif' }}>{v.title}</h3>
+                <p className="text-sm leading-relaxed font-normal" style={{ color: '#E7E1D2' }}>{v.description}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -678,21 +405,16 @@ const LandingPage = () => {
       </section>
 
       {/* ══════════════════════════════════════════════════════
-          TEMPLATES  (infinite carousel)
+          TEMPLATES (infinite carousel)
       ══════════════════════════════════════════════════════ */}
-      <section id="templates" className="py-24 bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-14">
+      <section id="templates" className="py-24 bg-paper overflow-hidden">
+        <div className="max-w-[1360px] mx-auto px-6 sm:px-8 lg:px-12 mb-14">
           <motion.div {...fadeUp} className="text-center">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-5">
-              Templates Built for{' '}
-              <span
-                className="bg-clip-text text-transparent"
-                style={{ backgroundImage: 'linear-gradient(135deg,#2563eb 0%,#6366f1 100%)' }}
-              >
-                Success
-              </span>
+            <div className="text-[13px] text-ink-soft font-semibold mb-5 uppercase tracking-wider">Templates</div>
+            <h2 className="font-serif text-ink mb-5" style={{ fontSize: 'clamp(28px,3vw,40px)' }}>
+              Documents, not decorations.
             </h2>
-            <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+            <p className="text-ink-soft text-[15px] max-w-[38ch] mx-auto mt-[10px]">
               Choose from our curated collection of professional, ATS-friendly templates designed to get you noticed.
             </p>
           </motion.div>
@@ -700,14 +422,15 @@ const LandingPage = () => {
 
         <div className="relative overflow-hidden">
           {/* Fade masks */}
-          <div className="absolute inset-y-0 left-0 w-24 sm:w-40 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-          <div className="absolute inset-y-0 right-0 w-24 sm:w-40 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-y-0 left-0 w-24 sm:w-40 bg-gradient-to-r from-paper to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-24 sm:w-40 bg-gradient-to-l from-paper to-transparent z-10 pointer-events-none" />
 
           <div className="animate-infinite-scroll gap-5 sm:gap-8 py-4">
             {[...resumeImages, ...resumeImages].map((img, idx) => (
               <div
                 key={idx}
-                className="w-[150px] sm:w-[300px] aspect-[1/1.414] bg-white rounded-2xl shadow-card border border-slate-200 overflow-hidden flex-shrink-0 hover:shadow-card-hover hover:scale-[1.02] transition-all duration-500 cursor-pointer"
+                className="w-[150px] sm:w-[300px] aspect-[1/1.414] bg-white shadow-card border border-rule overflow-hidden flex-shrink-0 hover:shadow-card-hover hover:scale-[1.02] hover:-translate-y-2 transition-all duration-500 cursor-pointer"
+                style={{ borderRadius: '2px' }}
               >
                 <img src={img} alt={`Resume Template ${idx + 1}`} className="w-full h-full object-cover" />
               </div>
@@ -717,36 +440,82 @@ const LandingPage = () => {
       </section>
 
       {/* ══════════════════════════════════════════════════════
-          CTA  (dark card)
+          HOW IT WORKS (timeline)
+      ══════════════════════════════════════════════════════ */}
+      <section id="story" className="rails" style={{ maxWidth: '1360px', margin: '0 auto', padding: '120px clamp(32px, 6.5vw, 110px)' }}>
+        <div className="px-2 sm:px-6 lg:px-8">
+          <motion.div {...fadeUp} className="max-w-[600px] mb-[70px]">
+            <div className="text-[13px] text-ink-soft font-semibold mb-5 uppercase tracking-wider">How it works</div>
+            <h2 className="font-serif text-ink leading-[1.2] mb-4" style={{ fontSize: 'clamp(28px,3vw,40px)' }}>Four sections. One page. In order.</h2>
+            <p className="text-ink-soft text-[16px]">ALRes walks you through your story in the sequence a hiring manager actually reads it.</p>
+          </motion.div>
+
+          <div className="relative grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
+            {/* Horizontal line */}
+            <div className="hidden lg:block absolute top-[11px] left-3 right-3 h-[1px]" style={{ background: '#B9AF98' }} />
+
+            {[
+              { num: '01', title: 'Experience', desc: 'Start with what you\'ve done. Roles, dates, and outcomes — structured so nothing gets buried.', w1: 80, w2: 60, active: true },
+              { num: '02', title: 'Education', desc: 'Degrees, certifications, and coursework — sized to matter as much as it should and no more.', w1: 60, w2: 40 },
+              { num: '03', title: 'Skills', desc: 'Named plainly, grouped by relevance, and kept out of a bar chart pretending to measure them.', w1: 50, w2: 70 },
+              { num: '04', title: 'Projects', desc: 'The proof. Work you\'re proud of, described in enough detail to earn the follow-up question.', w1: 90, w2: 50 },
+            ].map((step, i) => (
+              <motion.div key={i} variants={fadeUp} className="relative pt-9 pr-2 lg:pr-4 mb-8 lg:mb-0">
+                {/* Node dot */}
+                <div
+                  className="absolute top-[6px] left-0 w-[11px] h-[11px] rounded-full"
+                  style={{
+                    background: step.active ? '#A6402D' : '#FAF7F1',
+                    border: step.active ? '2px solid #A6402D' : '2px solid #16202B',
+                  }}
+                />
+                <span className="text-[12px] text-ink-soft mb-[10px] block font-mono font-bold">{step.num}</span>
+                <div className="font-serif text-[20px] font-semibold mb-[10px] text-ink">{step.title}</div>
+                <p className="text-[13.5px] text-ink-soft leading-[1.55] mb-4">{step.desc}</p>
+                <div className="border border-rule-strong bg-white p-[14px_16px]" style={{ borderRadius: '0px' }}>
+                  <div className="h-[9px] mb-[6px] rounded-[1px]" style={{ width: `${step.w1}%`, background: '#F0EAD9' }} />
+                  <div className="h-[9px] rounded-[1px]" style={{ width: `${step.w2}%`, background: '#F0EAD9' }} />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════
+          CTA (dark card)
       ══════════════════════════════════════════════════════ */}
       <section className="py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <motion.div
             {...fadeUp}
-            className="relative rounded-3xl p-10 sm:p-16 text-center overflow-hidden"
-            style={{ background: 'linear-gradient(135deg,#0f172a 0%,#0f1e3a 45%,#1e1b4b 100%)' }}
+            className="relative p-10 sm:p-16 text-center overflow-hidden"
+            style={{ background: '#16202B', borderRadius: '2px' }}
           >
-            {/* Blobs */}
-            <div className="absolute top-[-20%] left-[-10%] w-[55%] h-[100%] bg-primary-800/35 rounded-full blur-[90px] pointer-events-none" />
-            <div className="absolute bottom-[-20%] right-[-10%] w-[45%] h-[80%] bg-indigo-800/30 rounded-full blur-[70px] pointer-events-none" />
-            {/* Top accent line */}
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-400/50 to-transparent" />
+            {/* Corner marks */}
+            <span className="absolute w-[22px] h-[22px]" style={{ top: '24px', left: '24px', borderTop: '1px solid rgba(250,247,241,0.4)', borderLeft: '1px solid rgba(250,247,241,0.4)' }} />
+            <span className="absolute w-[22px] h-[22px]" style={{ top: '24px', right: '24px', borderTop: '1px solid rgba(250,247,241,0.4)', borderRight: '1px solid rgba(250,247,241,0.4)' }} />
+            <span className="absolute w-[22px] h-[22px]" style={{ bottom: '24px', left: '24px', borderBottom: '1px solid rgba(250,247,241,0.4)', borderLeft: '1px solid rgba(250,247,241,0.4)' }} />
+            <span className="absolute w-[22px] h-[22px]" style={{ bottom: '24px', right: '24px', borderBottom: '1px solid rgba(250,247,241,0.4)', borderRight: '1px solid rgba(250,247,241,0.4)' }} />
 
             <div className="relative z-10">
-              <h2 className="text-2xl sm:text-4xl font-bold text-white mb-4">Ready to land your dream job?</h2>
-              <p className="text-slate-300 text-sm sm:text-base mb-10 max-w-xl mx-auto leading-relaxed">
-                Join thousands of professionals who have accelerated their careers using ALRes. Build your professional presence today.
-              </p>
+              <h2 className="font-serif text-white mb-4 mx-auto max-w-[16ch]" style={{ color: '#FFFFFF', fontSize: 'clamp(32px,4.6vw,58px)', lineHeight: '1.15', fontWeight: 500 }}>
+                Your next opportunity starts with one page.
+              </h2>
+              <p className="mt-[22px] text-[16px] font-medium" style={{ color: '#F0EAD9' }}>Start writing — the layout is already taken care of.</p>
 
-              <div className="flex flex-col items-center gap-4">
+              <div className="flex flex-col items-center gap-4 mt-10">
                 {!user ? (
                   <>
                     <button
                       onClick={() => navigate('/dashboard')}
-                      className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-base sm:text-lg transition-colors duration-200 cursor-pointer shadow-sm"
+                      className="group inline-flex items-center gap-[10px] px-[26px] py-[15px] text-[15px] font-bold border-none cursor-pointer"
+                      style={{ background: '#FAF7F1', color: '#16202B', borderRadius: '2px', transition: 'background .2s ease' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = '#ffffff'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = '#FAF7F1'; }}
                     >
-                      {t('hero.buildBtn')}
-                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+                      <span>{t('hero.buildBtn')}</span>
+                      <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" style={{ color: '#16202B' }}>→</span>
                     </button>
                     {/* Hidden google login ref for CTA trigger */}
                     <div className="hidden" ref={googleLoginRef}>
@@ -754,7 +523,10 @@ const LandingPage = () => {
                     </div>
                     <button
                       onClick={triggerGoogleLogin}
-                      className="flex items-center gap-2.5 px-6 py-3 bg-white hover:bg-slate-100 text-slate-700 font-semibold text-sm rounded-xl border border-slate-200 transition-colors duration-200 cursor-pointer shadow-sm"
+                      className="flex items-center gap-2.5 px-6 py-3 text-sm font-semibold cursor-pointer border transition-colors duration-200"
+                      style={{ background: 'rgba(250,247,241,0.06)', color: '#F0EAD9', borderColor: 'rgba(250,247,241,0.35)', borderRadius: '2px' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(250,247,241,0.7)'; e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.background = 'rgba(250,247,241,0.12)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(250,247,241,0.35)'; e.currentTarget.style.color = '#F0EAD9'; e.currentTarget.style.background = 'rgba(250,247,241,0.06)'; }}
                     >
                       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-4 h-4" />
                       Continue with Google
@@ -763,10 +535,13 @@ const LandingPage = () => {
                 ) : (
                   <button
                     onClick={() => navigate('/dashboard')}
-                    className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-lg transition-colors duration-200 cursor-pointer shadow-sm"
+                    className="group inline-flex items-center gap-[10px] px-[26px] py-[15px] text-[15px] font-bold border-none cursor-pointer"
+                    style={{ background: '#FAF7F1', color: '#16202B', borderRadius: '2px', transition: 'background .2s ease' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = '#ffffff'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = '#FAF7F1'; }}
                   >
-                    Go to Dashboard
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+                    <span style={{ color: '#16202B' }}>Go to Dashboard</span>
+                    <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" style={{ color: '#16202B' }}>→</span>
                   </button>
                 )}
               </div>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Public+Sans:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,38 +7,56 @@
 
 @layer base {
   body {
-    background-color: theme('colors.surface.DEFAULT');
-    color: theme('colors.surface.on');
+    background-color: #FAF7F1;
+    color: #16202B;
     @apply font-sans antialiased;
-    font-feature-settings: "ss01", "cv01";
+    font-size: 16px;
+    line-height: 1.5;
   }
 
   ::selection {
-    background-color: theme('colors.primary.100');
-    color: theme('colors.primary.900');
+    background-color: #2E4A9E;
+    color: #FAF7F1;
   }
 
-  /* Global SaaS Button Standard: clean, minimal transitions, no scale, no movement, no colored glow */
+  h1, h2, h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+  }
+
+  :focus-visible {
+    outline: 2px solid #2E4A9E;
+    outline-offset: 3px;
+  }
+
+  /* Global editorial button style: clean, minimal transitions */
   button {
-    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, opacity 180ms ease;
+    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease, opacity 200ms ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
   }
 }
 
 /* ── Scrollbar ─────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { @apply bg-transparent; }
-::-webkit-scrollbar-thumb { @apply bg-slate-300 rounded-full; }
-::-webkit-scrollbar-thumb:hover { @apply bg-slate-400; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #B9AF98; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #4A5560; }
 
 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-.custom-scrollbar::-webkit-scrollbar-track { @apply bg-transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { @apply bg-slate-200 rounded-full; }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { @apply bg-slate-300; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #D9D2C0; border-radius: 99px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #B9AF98; }
 
-/* ── Gradient Text Utility ─────────────────────────── */
+/* ── Editorial Gradient Text ─────────────────────────── */
 .gradient-text {
   @apply bg-clip-text text-transparent;
-  background-image: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  background-image: linear-gradient(135deg, #2E4A9E 0%, #1C2E63 100%);
 }
 
 /* ── Noise texture overlay ─────────────────────────── */
@@ -51,17 +69,45 @@
   z-index: 0;
 }
 
-/* ── Clean SaaS button gradient ─────────────── */
+/* ── Editorial primary button ─────────────── */
 .btn-gradient {
-  background-color: #2563eb;
-  background-image: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
-  transition: background-color 180ms ease, opacity 180ms ease, filter 180ms ease;
+  background-color: #2E4A9E;
+  transition: background-color 200ms ease, opacity 200ms ease;
 }
 .btn-gradient:hover {
-  filter: brightness(0.94);
+  background-color: #1C2E63;
   box-shadow: none;
 }
 .btn-gradient:active {
-  filter: brightness(0.88);
+  background-color: #15234A;
   transform: none;
 }
+
+/* ── Editorial margin rails ─────────────── */
+.rails {
+  position: relative;
+}
+.rails::before,
+.rails::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #D9D2C0;
+  pointer-events: none;
+}
+.rails::before { left: clamp(20px, 5vw, 72px); }
+.rails::after { right: clamp(20px, 5vw, 72px); }
+
+/* ── Infinite scroll animation ─────────────── */
+@keyframes infiniteScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-infinite-scroll {
+  display: flex;
+  width: max-content;
+  animation: infiniteScroll 40s linear infinite;
+}
+.animate-infinite-scroll:hover { animation-play-state: paused; }
