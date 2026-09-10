@@ -4,6 +4,8 @@ import { useLanguage } from '../../context/LanguageContext';
 
 const FONTS = [
   { name: 'Default', value: '' },
+  { name: 'Fraunces (Serif)', value: '"Fraunces", serif' },
+  { name: 'Public Sans', value: '"Public Sans", sans-serif' },
   { name: 'Inter', value: 'Inter, sans-serif' },
   { name: 'Roboto', value: 'Roboto, sans-serif' },
   { name: 'Open Sans', value: '"Open Sans", sans-serif' },
@@ -23,18 +25,18 @@ const SectionStylePanel = ({ sectionKey, resume, setResume }) => {
     }));
   };
   return (
-    <div className="mb-3 p-3 bg-slate-50 rounded-lg border border-slate-200 grid grid-cols-3 gap-2">
+    <div className="mb-3 p-3 bg-paper-dim border border-rule grid grid-cols-3 gap-2" style={{ borderRadius: '2px' }}>
       <div>
-        <label className="text-[10px] font-semibold text-slate-500 block mb-1">Font</label>
+        <label className="text-[10px] font-bold text-ink-soft uppercase block mb-1">Font</label>
         <select value={sectionStyle.fontFamily || ''} onChange={e => update('fontFamily', e.target.value)}
-          className="w-full text-xs p-1.5 rounded border border-slate-200 bg-white text-slate-700">
+          className="w-full text-xs p-1.5 border border-rule bg-white text-ink" style={{ borderRadius: '2px' }}>
           {FONTS.map(f => <option key={f.name} value={f.value}>{f.name}</option>)}
         </select>
       </div>
       <div>
-        <label className="text-[10px] font-semibold text-slate-500 block mb-1">Size</label>
+        <label className="text-[10px] font-bold text-ink-soft uppercase block mb-1">Size</label>
         <select value={sectionStyle.fontSize || ''} onChange={e => update('fontSize', e.target.value)}
-          className="w-full text-xs p-1.5 rounded border border-slate-200 bg-white text-slate-700">
+          className="w-full text-xs p-1.5 border border-rule bg-white text-ink" style={{ borderRadius: '2px' }}>
           <option value="">Default</option>
           <option value="9px">Small</option>
           <option value="10px">Medium</option>
@@ -43,9 +45,9 @@ const SectionStylePanel = ({ sectionKey, resume, setResume }) => {
         </select>
       </div>
       <div>
-        <label className="text-[10px] font-semibold text-slate-500 block mb-1">Weight</label>
+        <label className="text-[10px] font-bold text-ink-soft uppercase block mb-1">Weight</label>
         <select value={sectionStyle.fontWeight || ''} onChange={e => update('fontWeight', e.target.value)}
-          className="w-full text-xs p-1.5 rounded border border-slate-200 bg-white text-slate-700">
+          className="w-full text-xs p-1.5 border border-rule bg-white text-ink" style={{ borderRadius: '2px' }}>
           <option value="">Default</option>
           <option value="300">Light</option>
           <option value="400">Regular</option>
@@ -84,22 +86,24 @@ const ExperienceEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCheck
 
   return (
     <section>
-      <div className="flex items-center justify-between mb-4 border-b border-slate-100 pb-2">
-        <h3 className="text-lg font-semibold text-slate-900 flex items-center">
-          <Briefcase className="w-5 h-5 mr-2 text-slate-400" />
+      <div className="flex items-center justify-between mb-4 border-b border-rule pb-3">
+        <h3 className="text-lg font-serif font-bold text-ink flex items-center">
+          <Briefcase className="w-5 h-5 mr-2 text-blue-500" />
           {t('editor.workExperience')}
         </h3>
         <div className="flex gap-2">
           <button
             onClick={() => setShowStyle(s => !s)}
-            className="text-[10px] font-bold text-slate-500 bg-slate-50 px-2 py-0.5 rounded border border-slate-200 hover:bg-slate-100 transition-colors flex items-center gap-1"
+            className="text-[10px] font-bold text-ink-soft bg-paper-dim px-2 py-1 border border-rule hover:bg-paper transition-colors flex items-center gap-1"
+            style={{ borderRadius: '2px' }}
           >
             <Type className="w-3 h-3" /> STYLE
             {showStyle ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
           </button>
           <button
             onClick={addExperience}
-            className="text-xs font-semibold text-primary-600 hover:text-primary-700 bg-primary-50 px-3 py-1.5 rounded-lg border border-primary-100 hover:bg-primary-100 transition-colors"
+            className="text-xs font-bold text-blue-700 bg-blue-50 px-3 py-1 border border-blue-200 hover:bg-blue-100 transition-colors"
+            style={{ borderRadius: '2px' }}
           >
             + {t('editor.addEntry')}
           </button>
@@ -110,59 +114,64 @@ const ExperienceEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCheck
 
       <div className="space-y-6">
         {(resume.experience || []).map((exp, index) => (
-          <div key={index} className="p-4 bg-slate-50 rounded-lg border border-slate-200 relative group">
+          <div key={index} className="p-4 bg-paper-dim border border-rule relative group" style={{ borderRadius: '2px' }}>
             <button
               onClick={() => removeExperience(index)}
-              className="absolute -top-2 -right-2 bg-red-100 text-red-600 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm z-10"
+              className="absolute -top-2 -right-2 bg-red-100 text-pen border border-red-200 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm z-10"
             >
               <Trash2 className="w-4 h-4" />
             </button>
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2 sm:col-span-1">
-                <label className="block text-xs font-medium text-slate-500 mb-1">{t('editor.company')}</label>
+                <label className="block text-xs font-bold text-ink-soft uppercase tracking-wider mb-1">{t('editor.company')}</label>
                 <input
                   type="text"
                   value={exp.company}
                   onChange={(e) => updateExperience(index, 'company', e.target.value)}
-                  className="w-full text-sm p-2 rounded-md border border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 bg-white text-slate-900"
+                  className="w-full text-sm p-2.5 border border-rule bg-white text-ink focus:border-blue-500 outline-none transition-colors"
+                  style={{ borderRadius: '2px' }}
                 />
               </div>
               <div className="col-span-2 sm:col-span-1">
-                <label className="block text-xs font-medium text-slate-500 mb-1">{t('editor.position')}</label>
+                <label className="block text-xs font-bold text-ink-soft uppercase tracking-wider mb-1">{t('editor.position')}</label>
                 <input
                   type="text"
                   value={exp.position}
                   onChange={(e) => updateExperience(index, 'position', e.target.value)}
-                  className="w-full text-sm p-2 rounded-md border border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 bg-white text-slate-900"
+                  className="w-full text-sm p-2.5 border border-rule bg-white text-ink focus:border-blue-500 outline-none transition-colors"
+                  style={{ borderRadius: '2px' }}
                 />
               </div>
               <div className="col-span-2 sm:col-span-1">
-                <label className="block text-xs font-medium text-slate-500 mb-1">{t('editor.startDate')}</label>
+                <label className="block text-xs font-bold text-ink-soft uppercase tracking-wider mb-1">{t('editor.startDate')}</label>
                 <input
                   type="text"
                   placeholder="MM/YYYY"
                   value={exp.startDate}
                   onChange={(e) => updateExperience(index, 'startDate', e.target.value)}
-                  className="w-full text-sm p-2 rounded-md border border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 bg-white text-slate-900"
+                  className="w-full text-sm p-2.5 border border-rule bg-white text-ink focus:border-blue-500 outline-none transition-colors"
+                  style={{ borderRadius: '2px' }}
                 />
               </div>
               <div className="col-span-2 sm:col-span-1">
-                <label className="block text-xs font-medium text-slate-500 mb-1">{t('editor.endDate')}</label>
+                <label className="block text-xs font-bold text-ink-soft uppercase tracking-wider mb-1">{t('editor.endDate')}</label>
                 <input
                   type="text"
                   placeholder="MM/YYYY or Present"
                   value={exp.endDate}
                   onChange={(e) => updateExperience(index, 'endDate', e.target.value)}
-                  className="w-full text-sm p-2 rounded-md border border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 bg-white text-slate-900"
+                  className="w-full text-sm p-2.5 border border-rule bg-white text-ink focus:border-blue-500 outline-none transition-colors"
+                  style={{ borderRadius: '2px' }}
                 />
               </div>
               <div className="col-span-2">
                 <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-medium text-slate-500">{t('editor.description')}</label>
+                  <label className="block text-xs font-bold text-ink-soft uppercase tracking-wider">{t('editor.description')}</label>
                   <button
                     onClick={() => handleGrammarCheck(exp.description, 'experience', index)}
                     disabled={aiLoading}
-                    className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100 hover:bg-green-100 transition-colors flex items-center gap-1"
+                    className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 border border-emerald-200 hover:bg-emerald-100 transition-colors flex items-center gap-1"
+                    style={{ borderRadius: '2px' }}
                   >
                     <Check className="w-3 h-3" />
                     {t('editor.grammar')}
@@ -172,7 +181,8 @@ const ExperienceEditor = ({ resume, setResume, enhanceWithAI, handleGrammarCheck
                   rows={3}
                   value={exp.description}
                   onChange={(e) => updateExperience(index, 'description', e.target.value)}
-                  className="w-full text-sm p-2 rounded-md border border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 bg-white text-slate-900 resize-none"
+                  className="w-full text-sm p-2.5 border border-rule bg-white text-ink focus:border-blue-500 outline-none resize-none transition-colors"
+                  style={{ borderRadius: '2px' }}
                   placeholder="Describe your responsibilities and achievements..."
                 />
               </div>

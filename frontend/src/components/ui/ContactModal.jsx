@@ -70,12 +70,12 @@ const ContactModal = ({ isOpen, onClose }) => {
       >
         <div className="text-center py-8">
           <div className="mb-4 flex justify-center">
-            <div className="bg-green-100 p-3 rounded-full">
-              <Send className="w-8 h-8 text-green-600" />
+            <div className="bg-emerald-50 p-3" style={{ borderRadius: '2px' }}>
+              <Send className="w-8 h-8 text-emerald-600" />
             </div>
           </div>
 
-          <h4 className="text-lg font-bold text-slate-900 mb-2">
+          <h4 className="text-lg font-serif font-semibold text-ink mb-2">
             {t('contactForm.success')}
           </h4>
 
@@ -84,7 +84,8 @@ const ContactModal = ({ isOpen, onClose }) => {
               setSubmitted(false);
               onClose();
             }}
-            className="mt-6 px-6 py-2 bg-slate-900 text-white rounded-lg font-bold hover:bg-slate-800 transition-colors"
+            className="mt-6 px-6 py-2 bg-ink text-paper font-bold hover:bg-blue-deep transition-colors"
+            style={{ borderRadius: '2px' }}
           >
             Close
           </button>
@@ -103,16 +104,16 @@ const ContactModal = ({ isOpen, onClose }) => {
       <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 pt-2">
 
         {}
-        <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 mb-6">
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+        <div className="bg-paper-dim p-3 border border-rule mb-6" style={{ borderRadius: '2px' }}>
+          <p className="text-xs font-bold text-ink-soft uppercase tracking-wider mb-1">
             {t('contactForm.ownerEmail')}
           </p>
         </div>
 
         {}
         <div>
-          <label className="text-sm font-bold text-slate-700 mb-1.5 flex items-center gap-2">
-            <User className="w-4 h-4 text-slate-400" />
+          <label className="text-sm font-bold text-ink mb-1.5 flex items-center gap-2">
+            <User className="w-4 h-4 text-ink-soft" />
             {t('contactForm.name')}
           </label>
 
@@ -125,14 +126,15 @@ const ContactModal = ({ isOpen, onClose }) => {
               setFormData({ ...formData, user_name: e.target.value })
             }
             placeholder={t('contactForm.placeholderName')}
-            className="block w-full rounded-lg border border-slate-300 p-3"
+            className="block w-full border border-rule p-3 bg-white text-ink focus:border-blue-500 focus:outline-none transition-colors"
+            style={{ borderRadius: '2px' }}
           />
         </div>
 
         {}
         <div>
-          <label className="text-sm font-bold text-slate-700 mb-1.5 flex items-center gap-2">
-            <Mail className="w-4 h-4 text-slate-400" />
+          <label className="text-sm font-bold text-ink mb-1.5 flex items-center gap-2">
+            <Mail className="w-4 h-4 text-ink-soft" />
             {t('contactForm.email')}
           </label>
 
@@ -145,14 +147,15 @@ const ContactModal = ({ isOpen, onClose }) => {
               setFormData({ ...formData, user_email: e.target.value })
             }
             placeholder={t('contactForm.placeholderEmail')}
-            className="block w-full rounded-lg border border-slate-300 p-3"
+            className="block w-full border border-rule p-3 bg-white text-ink focus:border-blue-500 focus:outline-none transition-colors"
+            style={{ borderRadius: '2px' }}
           />
         </div>
 
         {}
         <div>
-          <label className="text-sm font-bold text-slate-700 mb-1.5 flex items-center gap-2">
-            <MessageSquare className="w-4 h-4 text-slate-400" />
+          <label className="text-sm font-bold text-ink mb-1.5 flex items-center gap-2">
+            <MessageSquare className="w-4 h-4 text-ink-soft" />
             {t('contactForm.message')}
           </label>
 
@@ -165,7 +168,8 @@ const ContactModal = ({ isOpen, onClose }) => {
               setFormData({ ...formData, message: e.target.value })
             }
             placeholder={t('contactForm.placeholderMessage')}
-            className="block w-full rounded-lg border border-slate-300 p-3 resize-none"
+            className="block w-full border border-rule p-3 resize-none bg-white text-ink focus:border-blue-500 focus:outline-none transition-colors"
+            style={{ borderRadius: '2px' }}
           />
         </div>
 
@@ -173,7 +177,8 @@ const ContactModal = ({ isOpen, onClose }) => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold disabled:opacity-50 transition-colors duration-180 cursor-pointer"
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-ink hover:bg-blue-deep text-paper font-bold disabled:opacity-50 transition-colors duration-200 cursor-pointer"
+          style={{ borderRadius: '2px' }}
         >
           {isSubmitting ? (
             "Sending..."
