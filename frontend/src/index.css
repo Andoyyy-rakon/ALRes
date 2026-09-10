@@ -7,16 +7,16 @@
 
 @layer base {
   body {
-    background-color: #FAF7F1;
-    color: #16202B;
+    background-color: #F3F6FC;
+    color: #172033;
     @apply font-sans antialiased;
     font-size: 16px;
     line-height: 1.5;
   }
 
   ::selection {
-    background-color: #2E4A9E;
-    color: #FAF7F1;
+    background-color: #3155A6;
+    color: #F3F6FC;
   }
 
   h1, h2, h3 {
@@ -25,7 +25,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid #2E4A9E;
+    outline: 2px solid #3155A6;
     outline-offset: 3px;
   }
 
@@ -45,18 +45,18 @@
 /* ── Scrollbar ─────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #B9AF98; border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: #4A5560; }
+::-webkit-scrollbar-thumb { background: #C4D0E3; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #526078; }
 
 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: #D9D2C0; border-radius: 99px; }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #B9AF98; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #DDE3EE; border-radius: 99px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #C4D0E3; }
 
 /* ── Editorial Gradient Text ─────────────────────────── */
 .gradient-text {
   @apply bg-clip-text text-transparent;
-  background-image: linear-gradient(135deg, #2E4A9E 0%, #1C2E63 100%);
+  background-image: linear-gradient(135deg, #3155A6 0%, #254388 100%);
 }
 
 /* ── Noise texture overlay ─────────────────────────── */
@@ -71,15 +71,15 @@
 
 /* ── Editorial primary button ─────────────── */
 .btn-gradient {
-  background-color: #2E4A9E;
+  background-color: #3155A6;
   transition: background-color 200ms ease, opacity 200ms ease;
 }
 .btn-gradient:hover {
-  background-color: #1C2E63;
+  background-color: #254388;
   box-shadow: none;
 }
 .btn-gradient:active {
-  background-color: #15234A;
+  background-color: #1B3166;
   transform: none;
 }
 
@@ -94,7 +94,7 @@
   top: 0;
   bottom: 0;
   width: 1px;
-  background: #D9D2C0;
+  background: #DDE3EE;
   pointer-events: none;
 }
 .rails::before { left: clamp(20px, 5vw, 72px); }

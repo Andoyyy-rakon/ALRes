@@ -39,7 +39,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-rule" style={{ background: 'rgba(250,247,241,0.92)', backdropFilter: 'blur(6px)' }}>
+    <nav className="sticky top-0 z-50 border-b border-rule" style={{ background: 'rgba(243,246,252,0.92)', backdropFilter: 'blur(6px)' }}>
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex-shrink-0 flex items-center">

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -42,71 +42,135 @@ const GLOBAL_KEYFRAMES = `
 `;
 
 /* ─── Editorial Resume Preview ──────────────────────────── */
-const ResumePreviewCard = () => (
-  <div
-    className="relative z-[2] bg-white w-full max-w-[560px] border shadow-doc flex flex-col gap-[18px]"
-    style={{
-      padding: '44px 46px',
-      borderColor: '#E7E1D2',
-      aspectRatio: '8.5/10.6',
-      fontFamily: '"Public Sans", sans-serif',
-      animation: 'docIn 1.1s cubic-bezier(.2,.8,.2,1) both',
-    }}
-  >
-    {/* Header */}
-    <div style={{ borderBottom: '2px solid #16202B', paddingBottom: '14px' }}>
-      <div className="font-serif text-[29px] font-semibold" style={{ letterSpacing: '-0.01em', color: '#16202B' }}>Maya Ortiz</div>
-      <div className="text-[13.5px] font-semibold mt-[3px]" style={{ color: '#2E4A9E' }}>Senior Product Designer</div>
-      <div className="mt-[10px] flex gap-[14px] flex-wrap text-[11px]" style={{ color: '#4A5560' }}>
-        <span>maya.ortiz@email.com</span>
-        <span>+1 (415) 555-0134</span>
-        <span>San Francisco, CA</span>
-        <span>maya-ortiz.design</span>
+const PROFILES = [
+  {
+    name: 'Jose Reyes',
+    title: 'Senior Product Designer',
+    email: 'jose.reyes@email.com',
+    domain: 'jose-reyes.design',
+  },
+  {
+    name: 'Andre Hamil',
+    title: 'Lead UI/UX Designer',
+    email: 'Andre@email.com',
+    domain: 'Andre-Hamil.design',
+  },
+  {
+    name: 'Alex Rivera',
+    title: 'Senior Brand Architect',
+    email: 'alex.rivera@email.com',
+    domain: 'alex-rivera.design',
+  },
+];
+
+const ResumePreviewCard = () => {
+  const [profileIndex, setProfileIndex] = useState(0);
+  const [displayedName, setDisplayedName] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const currentProfile = PROFILES[profileIndex];
+
+  useEffect(() => {
+    const fullName = currentProfile.name;
+    let timer;
+
+    if (!isDeleting) {
+      if (displayedName.length < fullName.length) {
+        timer = setTimeout(() => {
+          setDisplayedName(fullName.slice(0, displayedName.length + 1));
+        }, 110);
+      } else {
+        // Hold full name for 3 seconds
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+        }, 3000);
+      }
+    } else {
+      if (displayedName.length > 0) {
+        timer = setTimeout(() => {
+          setDisplayedName(fullName.slice(0, displayedName.length - 1));
+        }, 60);
+      } else {
+        setIsDeleting(false);
+        setProfileIndex((prev) => (prev + 1) % PROFILES.length);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [displayedName, isDeleting, profileIndex, currentProfile.name]);
+
+  return (
+    <div
+      className="relative z-[2] bg-white w-full max-w-[560px] border shadow-doc flex flex-col gap-[18px]"
+      style={{
+        padding: '44px 46px',
+        borderColor: '#DDE3EE',
+        aspectRatio: '8.5/10.6',
+        fontFamily: '"Public Sans", sans-serif',
+        animation: 'docIn 1.1s cubic-bezier(.2,.8,.2,1) both',
+      }}
+    >
+      {/* Header */}
+      <div style={{ borderBottom: '2px solid #172033', paddingBottom: '14px' }}>
+        <div className="font-serif text-[29px] font-semibold min-h-[42px] flex items-center" style={{ letterSpacing: '-0.01em', color: '#172033' }}>
+          <span>{displayedName}</span>
+          <span
+            className="inline-block w-[2.5px] h-[26px] bg-[#3155A6] ml-1 rounded-full animate-pulse"
+            style={{ animationDuration: '0.7s' }}
+          />
+        </div>
+        <div className="text-[13.5px] font-semibold mt-[3px]" style={{ color: '#3155A6' }}>{currentProfile.title}</div>
+        <div className="mt-[10px] flex gap-[14px] flex-wrap text-[11px]" style={{ color: '#526078' }}>
+          <span>{currentProfile.email}</span>
+          <span>+1 (415) 555-0134</span>
+          <span>San Francisco, CA</span>
+          <span>{currentProfile.domain}</span>
+        </div>
       </div>
-    </div>
 
     {/* Summary */}
     <div>
-      <div className="text-[10.5px] font-bold uppercase tracking-[0.06em] pb-[5px] mb-[9px]" style={{ color: '#16202B', borderBottom: '1px solid #D9D2C0' }}>Summary</div>
-      <p className="text-[11.5px] leading-[1.55]" style={{ color: '#4A5560' }}>
+      <div className="text-[10.5px] font-bold uppercase tracking-[0.06em] pb-[5px] mb-[9px]" style={{ color: '#172033', borderBottom: '1px solid #DDE3EE' }}>Summary</div>
+      <p className="text-[11.5px] leading-[1.55]" style={{ color: '#526078' }}>
         Product designer with 8 years building design systems and 0–1 products for growth-stage teams. Focused on clarity, craft, and shipping things that hold up.
       </p>
     </div>
 
     {/* Experience */}
     <div>
-      <div className="text-[10.5px] font-bold uppercase tracking-[0.06em] pb-[5px] mb-[9px]" style={{ color: '#16202B', borderBottom: '1px solid #D9D2C0' }}>Experience</div>
+      <div className="text-[10.5px] font-bold uppercase tracking-[0.06em] pb-[5px] mb-[9px]" style={{ color: '#172033', borderBottom: '1px solid #DDE3EE' }}>Experience</div>
       <div className="mb-[10px]">
         <div className="flex justify-between text-[12px] font-semibold"><span>Senior Product Designer, Northbeam</span><span>2021 — Present</span></div>
-        <div className="text-[11px] italic mt-[1px]" style={{ color: '#4A5560' }}>Led the design system used across 6 product teams</div>
+        <div className="text-[11px] italic mt-[1px]" style={{ color: '#526078' }}>Led the design system used across 6 product teams</div>
         <ul className="mt-[6px] pl-[14px] list-disc">
-          <li className="text-[11px] mb-[3px] leading-[1.45]" style={{ color: '#4A5560' }}>Reduced design-to-ship time by 34% with a shared component library</li>
-          <li className="text-[11px] mb-[3px] leading-[1.45]" style={{ color: '#4A5560' }}>Ran the redesign of the core onboarding flow, lifting activation 18%</li>
+          <li className="text-[11px] mb-[3px] leading-[1.45]" style={{ color: '#526078' }}>Reduced design-to-ship time by 34% with a shared component library</li>
+          <li className="text-[11px] mb-[3px] leading-[1.45]" style={{ color: '#526078' }}>Ran the redesign of the core onboarding flow, lifting activation 18%</li>
         </ul>
       </div>
       <div className="mb-[10px]">
         <div className="flex justify-between text-[12px] font-semibold"><span>Product Designer, Fieldstone</span><span>2018 — 2021</span></div>
-        <div className="text-[11px] italic mt-[1px]" style={{ color: '#4A5560' }}>First design hire, reporting to the founder</div>
+        <div className="text-[11px] italic mt-[1px]" style={{ color: '#526078' }}>First design hire, reporting to the founder</div>
       </div>
     </div>
 
     {/* Education */}
     <div>
-      <div className="text-[10.5px] font-bold uppercase tracking-[0.06em] pb-[5px] mb-[9px]" style={{ color: '#16202B', borderBottom: '1px solid #D9D2C0' }}>Education</div>
+      <div className="text-[10.5px] font-bold uppercase tracking-[0.06em] pb-[5px] mb-[9px]" style={{ color: '#172033', borderBottom: '1px solid #DDE3EE' }}>Education</div>
       <div className="flex justify-between text-[12px] font-semibold"><span>B.F.A., Graphic Design — RISD</span><span>2018</span></div>
     </div>
 
     {/* Skills */}
     <div>
-      <div className="text-[10.5px] font-bold uppercase tracking-[0.06em] pb-[5px] mb-[9px]" style={{ color: '#16202B', borderBottom: '1px solid #D9D2C0' }}>Skills</div>
+      <div className="text-[10.5px] font-bold uppercase tracking-[0.06em] pb-[5px] mb-[9px]" style={{ color: '#172033', borderBottom: '1px solid #DDE3EE' }}>Skills</div>
       <div className="flex flex-wrap gap-[6px_10px]">
         {['Design systems', 'Figma', 'Prototyping', 'Research', 'Typography'].map((s) => (
-          <span key={s} className="text-[10.5px] px-[9px] py-[3px]" style={{ color: '#16202B', border: '1px solid #B9AF98', borderRadius: '1px' }}>{s}</span>
+          <span key={s} className="text-[10.5px] px-[9px] py-[3px]" style={{ color: '#172033', border: '1px solid #C4D0E3', borderRadius: '1px' }}>{s}</span>
         ))}
       </div>
     </div>
   </div>
-);
+  );
+};
 
 /* ─── Main Component ─────────────────────────────────────────── */
 const LandingPage = () => {
@@ -224,9 +288,9 @@ const LandingPage = () => {
                   <button
                     onClick={() => navigate('/dashboard')}
                     className="group inline-flex items-center gap-[10px] px-[26px] py-[15px] text-[15px] font-semibold text-paper border-none cursor-pointer"
-                    style={{ background: '#2E4A9E', borderRadius: '2px', transition: 'transform .25s cubic-bezier(.2,.8,.2,1), background .2s ease' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = '#1C2E63'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = '#2E4A9E'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                    style={{ background: '#3155A6', borderRadius: '2px', transition: 'transform .25s cubic-bezier(.2,.8,.2,1), background .2s ease' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = '#254388'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = '#3155A6'; e.currentTarget.style.transform = 'translateY(0)'; }}
                   >
                     {t('hero.buildBtn')}
                     <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
@@ -237,9 +301,9 @@ const LandingPage = () => {
                 <button
                   onClick={() => navigate('/dashboard')}
                   className="group inline-flex items-center gap-[10px] px-[26px] py-[15px] text-[15px] font-semibold text-paper border-none cursor-pointer"
-                  style={{ background: '#2E4A9E', borderRadius: '2px', transition: 'transform .25s cubic-bezier(.2,.8,.2,1), background .2s ease' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = '#1C2E63'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = '#2E4A9E'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                  style={{ background: '#3155A6', borderRadius: '2px', transition: 'transform .25s cubic-bezier(.2,.8,.2,1), background .2s ease' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = '#254388'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = '#3155A6'; e.currentTarget.style.transform = 'translateY(0)'; }}
                 >
                   Go to Dashboard
                   <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
@@ -287,8 +351,8 @@ const LandingPage = () => {
                 className="absolute z-[1]"
                 style={{
                   inset: '12px -16px -16px 16px',
-                  background: '#F0EAD9',
-                  border: '1px solid #B9AF98',
+                  background: '#E5ECF6',
+                  border: '1px solid #C4D0E3',
                   transform: 'rotate(1.4deg)',
                 }}
               />
@@ -363,18 +427,18 @@ const LandingPage = () => {
       ══════════════════════════════════════════════════════ */}
       <section
         className="py-24 relative overflow-hidden"
-        style={{ background: '#16202B', padding: '140px clamp(32px, 6.5vw, 110px)' }}
+        style={{ background: '#172033', padding: '140px clamp(32px, 6.5vw, 110px)' }}
       >
         {/* Corner marks */}
         <div className="max-w-[1360px] mx-auto relative px-2 sm:px-6 lg:px-8">
-          <span className="absolute w-[22px] h-[22px]" style={{ top: '-70px', left: '16px', borderTop: '1px solid rgba(250,247,241,0.4)', borderLeft: '1px solid rgba(250,247,241,0.4)' }} />
-          <span className="absolute w-[22px] h-[22px]" style={{ top: '-70px', right: '16px', borderTop: '1px solid rgba(250,247,241,0.4)', borderRight: '1px solid rgba(250,247,241,0.4)' }} />
-          <span className="absolute w-[22px] h-[22px]" style={{ bottom: '-70px', left: '16px', borderBottom: '1px solid rgba(250,247,241,0.4)', borderLeft: '1px solid rgba(250,247,241,0.4)' }} />
-          <span className="absolute w-[22px] h-[22px]" style={{ bottom: '-70px', right: '16px', borderBottom: '1px solid rgba(250,247,241,0.4)', borderRight: '1px solid rgba(250,247,241,0.4)' }} />
+          <span className="absolute w-[22px] h-[22px]" style={{ top: '-70px', left: '16px', borderTop: '1px solid rgba(243,246,252,0.4)', borderLeft: '1px solid rgba(243,246,252,0.4)' }} />
+          <span className="absolute w-[22px] h-[22px]" style={{ top: '-70px', right: '16px', borderTop: '1px solid rgba(243,246,252,0.4)', borderRight: '1px solid rgba(243,246,252,0.4)' }} />
+          <span className="absolute w-[22px] h-[22px]" style={{ bottom: '-70px', left: '16px', borderBottom: '1px solid rgba(243,246,252,0.4)', borderLeft: '1px solid rgba(243,246,252,0.4)' }} />
+          <span className="absolute w-[22px] h-[22px]" style={{ bottom: '-70px', right: '16px', borderBottom: '1px solid rgba(243,246,252,0.4)', borderRight: '1px solid rgba(243,246,252,0.4)' }} />
 
           <motion.div {...fadeUp} className="text-center mb-16">
             <h2 className="font-serif text-white mb-4" style={{ fontSize: 'clamp(28px,3vw,40px)', fontWeight: 500 }}>Why Job Seekers Love ALRes</h2>
-            <p className="text-[16px] max-w-2xl mx-auto font-medium" style={{ color: '#E7E1D2' }}>Designed by students, for students and job seekers.</p>
+            <p className="text-[16px] max-w-2xl mx-auto font-medium" style={{ color: '#E5ECF6' }}>Designed by students, for students and job seekers.</p>
           </motion.div>
 
           <motion.div
@@ -389,15 +453,15 @@ const LandingPage = () => {
                 key={i}
                 variants={fadeUp}
                 className="p-7 border hover:-translate-y-1 transition-all duration-300 group"
-                style={{ background: 'rgba(250,247,241,0.06)', borderColor: 'rgba(250,247,241,0.18)', borderRadius: '2px' }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(250,247,241,0.12)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(250,247,241,0.06)'; }}
+                style={{ background: 'rgba(243,246,252,0.06)', borderColor: 'rgba(243,246,252,0.18)', borderRadius: '2px' }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(243,246,252,0.12)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(243,246,252,0.06)'; }}
               >
-                <div className="w-11 h-11 border flex items-center justify-center text-white mb-5 group-hover:scale-110 transition-transform duration-300" style={{ background: '#2E4A9E', borderColor: 'rgba(250,247,241,0.25)', borderRadius: '2px' }}>
+                <div className="w-11 h-11 border flex items-center justify-center text-white mb-5 group-hover:scale-110 transition-transform duration-300" style={{ background: '#3155A6', borderColor: 'rgba(243,246,252,0.25)', borderRadius: '2px' }}>
                   {v.icon}
                 </div>
                 <h3 className="text-base font-bold text-white mb-2" style={{ fontFamily: '"Public Sans", sans-serif' }}>{v.title}</h3>
-                <p className="text-sm leading-relaxed font-normal" style={{ color: '#E7E1D2' }}>{v.description}</p>
+                <p className="text-sm leading-relaxed font-normal" style={{ color: '#E5ECF6' }}>{v.description}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -452,7 +516,7 @@ const LandingPage = () => {
 
           <div className="relative grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
             {/* Horizontal line */}
-            <div className="hidden lg:block absolute top-[11px] left-3 right-3 h-[1px]" style={{ background: '#B9AF98' }} />
+            <div className="hidden lg:block absolute top-[11px] left-3 right-3 h-[1px]" style={{ background: '#DDE3EE' }} />
 
             {[
               { num: '01', title: 'Experience', desc: 'Start with what you\'ve done. Roles, dates, and outcomes — structured so nothing gets buried.', w1: 80, w2: 60, active: true },
@@ -465,16 +529,16 @@ const LandingPage = () => {
                 <div
                   className="absolute top-[6px] left-0 w-[11px] h-[11px] rounded-full"
                   style={{
-                    background: step.active ? '#A6402D' : '#FAF7F1',
-                    border: step.active ? '2px solid #A6402D' : '2px solid #16202B',
+                    background: step.active ? '#A6402D' : '#F3F6FC',
+                    border: step.active ? '2px solid #A6402D' : '2px solid #172033',
                   }}
                 />
                 <span className="text-[12px] text-ink-soft mb-[10px] block font-mono font-bold">{step.num}</span>
                 <div className="font-serif text-[20px] font-semibold mb-[10px] text-ink">{step.title}</div>
                 <p className="text-[13.5px] text-ink-soft leading-[1.55] mb-4">{step.desc}</p>
                 <div className="border border-rule-strong bg-white p-[14px_16px]" style={{ borderRadius: '0px' }}>
-                  <div className="h-[9px] mb-[6px] rounded-[1px]" style={{ width: `${step.w1}%`, background: '#F0EAD9' }} />
-                  <div className="h-[9px] rounded-[1px]" style={{ width: `${step.w2}%`, background: '#F0EAD9' }} />
+                  <div className="h-[9px] mb-[6px] rounded-[1px]" style={{ width: `${step.w1}%`, background: '#E5ECF6' }} />
+                  <div className="h-[9px] rounded-[1px]" style={{ width: `${step.w2}%`, background: '#E5ECF6' }} />
                 </div>
               </motion.div>
             ))}
@@ -490,19 +554,19 @@ const LandingPage = () => {
           <motion.div
             {...fadeUp}
             className="relative p-10 sm:p-16 text-center overflow-hidden"
-            style={{ background: '#16202B', borderRadius: '2px' }}
+            style={{ background: '#172033', borderRadius: '2px' }}
           >
             {/* Corner marks */}
-            <span className="absolute w-[22px] h-[22px]" style={{ top: '24px', left: '24px', borderTop: '1px solid rgba(250,247,241,0.4)', borderLeft: '1px solid rgba(250,247,241,0.4)' }} />
-            <span className="absolute w-[22px] h-[22px]" style={{ top: '24px', right: '24px', borderTop: '1px solid rgba(250,247,241,0.4)', borderRight: '1px solid rgba(250,247,241,0.4)' }} />
-            <span className="absolute w-[22px] h-[22px]" style={{ bottom: '24px', left: '24px', borderBottom: '1px solid rgba(250,247,241,0.4)', borderLeft: '1px solid rgba(250,247,241,0.4)' }} />
-            <span className="absolute w-[22px] h-[22px]" style={{ bottom: '24px', right: '24px', borderBottom: '1px solid rgba(250,247,241,0.4)', borderRight: '1px solid rgba(250,247,241,0.4)' }} />
+            <span className="absolute w-[22px] h-[22px]" style={{ top: '24px', left: '24px', borderTop: '1px solid rgba(243,246,252,0.4)', borderLeft: '1px solid rgba(243,246,252,0.4)' }} />
+            <span className="absolute w-[22px] h-[22px]" style={{ top: '24px', right: '24px', borderTop: '1px solid rgba(243,246,252,0.4)', borderRight: '1px solid rgba(243,246,252,0.4)' }} />
+            <span className="absolute w-[22px] h-[22px]" style={{ bottom: '24px', left: '24px', borderBottom: '1px solid rgba(243,246,252,0.4)', borderLeft: '1px solid rgba(243,246,252,0.4)' }} />
+            <span className="absolute w-[22px] h-[22px]" style={{ bottom: '24px', right: '24px', borderBottom: '1px solid rgba(243,246,252,0.4)', borderRight: '1px solid rgba(243,246,252,0.4)' }} />
 
             <div className="relative z-10">
               <h2 className="font-serif text-white mb-4 mx-auto max-w-[16ch]" style={{ color: '#FFFFFF', fontSize: 'clamp(32px,4.6vw,58px)', lineHeight: '1.15', fontWeight: 500 }}>
                 Your next opportunity starts with one page.
               </h2>
-              <p className="mt-[22px] text-[16px] font-medium" style={{ color: '#F0EAD9' }}>Start writing — the layout is already taken care of.</p>
+              <p className="mt-[22px] text-[16px] font-medium" style={{ color: '#E5ECF6' }}>Start writing — the layout is already taken care of.</p>
 
               <div className="flex flex-col items-center gap-4 mt-10">
                 {!user ? (
@@ -510,12 +574,12 @@ const LandingPage = () => {
                     <button
                       onClick={() => navigate('/dashboard')}
                       className="group inline-flex items-center gap-[10px] px-[26px] py-[15px] text-[15px] font-bold border-none cursor-pointer"
-                      style={{ background: '#FAF7F1', color: '#16202B', borderRadius: '2px', transition: 'background .2s ease' }}
+                      style={{ background: '#F3F6FC', color: '#172033', borderRadius: '2px', transition: 'background .2s ease' }}
                       onMouseEnter={(e) => { e.currentTarget.style.background = '#ffffff'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.background = '#FAF7F1'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = '#F3F6FC'; }}
                     >
                       <span>{t('hero.buildBtn')}</span>
-                      <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" style={{ color: '#16202B' }}>→</span>
+                      <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" style={{ color: '#172033' }}>→</span>
                     </button>
                     {/* Hidden google login ref for CTA trigger */}
                     <div className="hidden" ref={googleLoginRef}>
@@ -524,9 +588,9 @@ const LandingPage = () => {
                     <button
                       onClick={triggerGoogleLogin}
                       className="flex items-center gap-2.5 px-6 py-3 text-sm font-semibold cursor-pointer border transition-colors duration-200"
-                      style={{ background: 'rgba(250,247,241,0.06)', color: '#F0EAD9', borderColor: 'rgba(250,247,241,0.35)', borderRadius: '2px' }}
-                      onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(250,247,241,0.7)'; e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.background = 'rgba(250,247,241,0.12)'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(250,247,241,0.35)'; e.currentTarget.style.color = '#F0EAD9'; e.currentTarget.style.background = 'rgba(250,247,241,0.06)'; }}
+                      style={{ background: 'rgba(243,246,252,0.06)', color: '#E5ECF6', borderColor: 'rgba(243,246,252,0.35)', borderRadius: '2px' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(243,246,252,0.7)'; e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.background = 'rgba(243,246,252,0.12)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(243,246,252,0.35)'; e.currentTarget.style.color = '#E5ECF6'; e.currentTarget.style.background = 'rgba(243,246,252,0.06)'; }}
                     >
                       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-4 h-4" />
                       Continue with Google
@@ -536,12 +600,12 @@ const LandingPage = () => {
                   <button
                     onClick={() => navigate('/dashboard')}
                     className="group inline-flex items-center gap-[10px] px-[26px] py-[15px] text-[15px] font-bold border-none cursor-pointer"
-                    style={{ background: '#FAF7F1', color: '#16202B', borderRadius: '2px', transition: 'background .2s ease' }}
+                    style={{ background: '#F3F6FC', color: '#172033', borderRadius: '2px', transition: 'background .2s ease' }}
                     onMouseEnter={(e) => { e.currentTarget.style.background = '#ffffff'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = '#FAF7F1'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = '#F3F6FC'; }}
                   >
-                    <span style={{ color: '#16202B' }}>Go to Dashboard</span>
-                    <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" style={{ color: '#16202B' }}>→</span>
+                    <span style={{ color: '#172033' }}>Go to Dashboard</span>
+                    <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" style={{ color: '#172033' }}>→</span>
                   </button>
                 )}
               </div>
